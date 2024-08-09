@@ -1,6 +1,6 @@
 //阿吽の呼吸
 //モザンビークヒア
-//けて...たすけて...
+//助けて
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
