@@ -1,5 +1,4 @@
-//ˆ¢™İ‚ÌŒÄ‹z
-//‘„ƒ}ƒ“
+//é˜¿å½ã®å‘¼å¸
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +6,16 @@ using UnityEngine.InputSystem;
 
 public class Human1 : MonoBehaviour
 {
-    [SerializeField, Header("ˆÚ“®‘¬“x")]//Unityã‚ÅMoveSpeed‚Ì’l‚ğ•ÏX‚Å‚«‚é‚æ‚¤‚É‚È‚é
+    [SerializeField, Header("ç§»å‹•é€Ÿåº¦")]//Unityä¸Šã§MoveSpeedã®å€¤ã‚’å¤‰æ›´ã§ãã‚‹ã‚ˆã†ã«ãªã‚‹
     private float MoveSpeed;
-    [SerializeField, Header("ƒWƒƒƒ“ƒv‘¬“x")]
+    [SerializeField, Header("ã‚¸ãƒ£ãƒ³ãƒ—é€Ÿåº¦")]
     private float JumpSpeed;
 
     private Vector2 inputDirection;
     private Rigidbody2D rigid;
     private Animator anim;
     private bool bJump;
-    private float MoveX = 0.0f;//Œü‚«‚Ì”»’è•Ï”
+    private float MoveX = 0.0f;//å‘ãã®åˆ¤å®šå¤‰æ•°
 
     void Start()
     {
@@ -49,7 +48,7 @@ public class Human1 : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            bJump = false;   //‚à‚¤ˆê“xƒWƒƒƒ“ƒv‚Å‚«‚é‚æ‚¤‚É
+            bJump = false;   //ã‚‚ã†ä¸€åº¦ã‚¸ãƒ£ãƒ³ãƒ—ã§ãã‚‹ã‚ˆã†ã«
             anim.SetBool("Jump", bJump);
         }
     }
@@ -63,9 +62,9 @@ public class Human1 : MonoBehaviour
     {
         if (!context.performed || bJump)
         {
-            return; //ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢‚É‰º‚Ìˆ—‚ªÀs‚³‚ê‚È‚¢–½—ß
+            return; //ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ãªã„æ™‚ã«ä¸‹ã®å‡¦ç†ãŒå®Ÿè¡Œã•ã‚Œãªã„å‘½ä»¤
         }
-        rigid.AddForce(Vector2.up * JumpSpeed, ForceMode2D.Impulse);//AddForce:‰Á‘¬ˆ—
+        rigid.AddForce(Vector2.up * JumpSpeed, ForceMode2D.Impulse);//AddForce:åŠ é€Ÿå‡¦ç†
         bJump = true;
         anim.SetBool("Jump", bJump);
     }
