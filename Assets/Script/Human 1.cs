@@ -1,4 +1,5 @@
 //阿吽の呼吸
+//やっはろ～
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
