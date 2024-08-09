@@ -1,5 +1,5 @@
-//���݂̌ċz
-//����΍�
+//アバダケダブラ
+//ルーモス
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
