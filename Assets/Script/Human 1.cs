@@ -1,5 +1,4 @@
 //阿吽の呼吸
-//モザンビークヒア
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
