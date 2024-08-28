@@ -18,7 +18,7 @@ public class Human1 : MonoBehaviour
     private float MoveX = 0.0f;//向きの判定変数
 
     public float jumpForce = 10f;
-    private int health = 3;
+    private int health = 1;
 
     void Start()
     {
@@ -31,11 +31,11 @@ public class Human1 : MonoBehaviour
     {
         Move();
         MoveX = Input.GetAxisRaw("Horizontal");
-        if(MoveX > 0.0f)
+        if (MoveX > 0.0f)
         {
             transform.localScale = new Vector3(1, 1);
         }
-        else if(MoveX < 0.0f)
+        else if (MoveX < 0.0f)
         {
             transform.localScale = new Vector3(-1, 1);
         }
@@ -55,7 +55,7 @@ public class Human1 : MonoBehaviour
             anim.SetBool("Jump", bJump);
         }
 
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
             HandleCollisionWithEnemy(collision);
         }
@@ -63,8 +63,8 @@ public class Human1 : MonoBehaviour
 
     public void HandleCollisionWithEnemy(Collision2D collision)
     {
-        float playerY = transform.position.y;
-        float contactY = collision.contacts[0].point.y;
+        float playerY = transform.position.y - 3;
+        float contactY = collision.transform.position.y;
 
         if (playerY > contactY)
         {
@@ -81,7 +81,7 @@ public class Human1 : MonoBehaviour
     {
         health -= 1;
 
-        if(health <= 0)
+        if (health <= 0)
         {
             Debug.Log("Player is dead!");
             gameObject.SetActive(false);
