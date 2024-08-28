@@ -87,7 +87,7 @@ public class stage : MonoBehaviour
                 }
                 else if (Stage[x, y] == 1)
                 {
-                    Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
+                    Vector2 pos = new Vector2((inputx - 1 - x) * 20 + 5, (inputy - 1 - y) * 20);
                     GameObject enemy = Instantiate(enemyA, pos, Quaternion.identity);
                     enemy.transform.parent = transform;
                 }

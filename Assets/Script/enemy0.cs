@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class enemy0 : MonoBehaviour
@@ -19,7 +20,7 @@ public class enemy0 : MonoBehaviour
     void Update()
     {
         Move();
-        
+
     }
 
     private void Move()
@@ -30,7 +31,22 @@ public class enemy0 : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // wallタグのオブジェクトに衝突した場合
-        if (collision.gameObject.tag == "wall")
+        if (collision.gameObject.tag == "wall" || collision.gameObject.tag == "Enemy")
+        {
+            // 移動方向を反転させる
+            speed = -speed;
+
+            // 敵キャラクターの向きを反転させる
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1;
+            transform.localScale = localScale;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D trigger)
+    {
+        // wallタグのオブジェクトに衝突した場合
+        if (trigger.gameObject.tag == "wall")
         {
             // 移動方向を反転させる
             speed = -speed;
