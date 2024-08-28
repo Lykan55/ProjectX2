@@ -5,10 +5,9 @@ using UnityEngine;
 public class enemy0 : MonoBehaviour
 {
     [SerializeField, Header("移動速度")]//Unity上でMoveSpeedの値を変更できるようになる
-    private float MoveSpeed;
+
+    //private float MoveSpeed;
     public float speed = 2f;  // 敵キャラクターの移動速度
-
-
     private Rigidbody2D rigid;
 
     void Start()
@@ -25,7 +24,7 @@ public class enemy0 : MonoBehaviour
 
     private void Move()
     {
-        rigid.velocity = new Vector2(Vector2.left.x * MoveSpeed, rigid.velocity.y);
+        rigid.velocity = new Vector2(-speed, rigid.velocity.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
