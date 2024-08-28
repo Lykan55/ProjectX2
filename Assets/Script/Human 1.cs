@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +16,9 @@ public class Human1 : MonoBehaviour
     private Animator anim;
     private bool bJump;
     private float MoveX = 0.0f;//向きの判定変数
+
+    public float jumpForce = 10f;
+    private int health = 3;
 
     void Start()
     {
@@ -49,6 +53,38 @@ public class Human1 : MonoBehaviour
         {
             bJump = false;   //もう一度ジャンプできるように
             anim.SetBool("Jump", bJump);
+        }
+
+        if(collision.gameObject.tag == "Enemy")
+        {
+            HandleCollisionWithEnemy(collision);
+        }
+    }
+
+    public void HandleCollisionWithEnemy(Collision2D collision)
+    {
+        float playerY = transform.position.y;
+        float contactY = collision.contacts[0].point.y;
+
+        if (playerY > contactY)
+        {
+            Destroy(collision.gameObject);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(0, jumpForce);
+        }
+        else
+        {
+            TakeDamege();
+        }
+    }
+
+    private void TakeDamege()
+    {
+        health -= 1;
+
+        if(health <= 0)
+        {
+            Debug.Log("Player is dead!");
+            gameObject.SetActive(false);
         }
     }
 
