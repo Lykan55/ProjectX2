@@ -662,6 +662,7 @@ MonoBehaviour:
   height: 15
   stageblockA: {fileID: 9089591882278033723, guid: b9a215c0e6d793b44b7cf03d2fac54c1, type: 3}
   stageblockB: {fileID: 804330066037301581, guid: d47ba8addfac14a4881f4016b181bc4f, type: 3}
+  goal: {fileID: 6588369450204267062, guid: bb37396f73d1f4342a458f2f0f5ecb43, type: 3}
   enemyA: {fileID: 8114399302398817437, guid: 00172349d8aeaba4abd8949dbc9bb9db, type: 3}
 --- !u!4 &606131107
 Transform:

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class stage : MonoBehaviour
@@ -13,6 +14,8 @@ public class stage : MonoBehaviour
     static int cnt = 0;
     static int go = -1;
     static int end = 0;
+    static int[] start = new int[2];
+    static int[] goaldata = { 0, 0, 0 };
 
     public int width;
     public int height;
@@ -21,6 +24,7 @@ public class stage : MonoBehaviour
 
     public GameObject stageblockA;
     public GameObject stageblockB;
+    public GameObject goal;
 
     public GameObject enemyA;
 
@@ -56,6 +60,12 @@ public class stage : MonoBehaviour
 
             if (data[0] == -1 && data[1] == -1 && data[2] == -1 && data[3] == -1)
             {
+                if (goaldata[2] < rist.Length)
+                {
+                    goaldata[0] = x;
+                    goaldata[1] = y;
+                    goaldata[2] = rist.Length;
+                }
                 nothing();
             }
             else
@@ -75,6 +85,12 @@ public class stage : MonoBehaviour
             }
         }
 
+        Stage[goaldata[0], goaldata[1]] = 3;
+        if (Stage[start[0], start[1]] == 1)
+        {
+            Stage[start[0], start[1]] = -1;
+        }
+
         for (y = 0; y < inputy; y++)
         {
             for (x = 0; x < inputx; x++)
@@ -91,11 +107,17 @@ public class stage : MonoBehaviour
                     GameObject enemy = Instantiate(enemyA, pos, Quaternion.identity);
                     enemy.transform.parent = transform;
                 }
-                else
+                else if (Stage[x, y] == 2)
                 {
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
                     GameObject boxB = Instantiate(stageblockB, pos, Quaternion.identity);
                     boxB.transform.parent = transform;
+                }
+                else if (Stage[x, y] == 3)
+                {
+                    Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
+                    GameObject goalpos = Instantiate(goal, pos, Quaternion.identity);
+                    goalpos.transform.parent = transform;
                 }
             }
         }
@@ -105,7 +127,7 @@ public class stage : MonoBehaviour
 
 
 
-    static int inputnumber(int input)
+    int inputnumber(int input)
     {
         if (input < 5)
         {
@@ -119,7 +141,7 @@ public class stage : MonoBehaviour
         return input;
     }
 
-    static void firstpoint()
+    void firstpoint()
     {
         x = UnityEngine.Random.Range(0, inputx - 1);
         if (x % 2 == 0)
@@ -133,9 +155,15 @@ public class stage : MonoBehaviour
         }
 
         Stage[x, y] = 1;
+        start[0] = x;
+        start[1] = y;
+
+        Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20 - 7);
+        GameObject.Find("Human 1").GetComponent<Transform>().position = pos;
+
     }
 
-    static void search()
+    void search()
     {
         for (int a = 0; a < 4; a++)
         {
@@ -189,7 +217,7 @@ public class stage : MonoBehaviour
         }
     }
 
-    static void nothing()
+    void nothing()
     {
         if (cnt == 0)
         {
@@ -219,7 +247,7 @@ public class stage : MonoBehaviour
         }
     }
 
-    static void going()
+    void going()
     {
         while (go == -1)
         {
