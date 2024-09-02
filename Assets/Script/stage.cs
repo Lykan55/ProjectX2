@@ -13,7 +13,7 @@ public class stage : MonoBehaviour
     static int[] rist = new int[1];
     static int cnt = 0;
     static int go = -1;
-    static int end = 0;
+    static bool end = false;
     static int[] start = new int[2];
     static int[] goaldata = { 0, 0, 0 };
 
@@ -35,20 +35,10 @@ public class stage : MonoBehaviour
 
         Stage = new int[inputx, inputy];
 
-
-        for (y = 0; y < inputy; y++)
-        {
-            for (x = 0; x < inputx; x++)
-            {
-                Stage[x, y] = 0;
-            }
-        }
-
-
+        Reset();
         firstpoint();
 
-
-        while (end == 0)
+        while (end == false)
         {
             go = -1;
             for (int a = 0; a < 4; a++)
@@ -221,7 +211,7 @@ public class stage : MonoBehaviour
     {
         if (cnt == 0)
         {
-            end++;
+            end = true;
         }
         else
         {
@@ -280,5 +270,28 @@ public class stage : MonoBehaviour
                 x -= 2;
                 break;
         }
+    }
+
+    private void Reset()
+    {
+        for (y = 0; y < inputy; y++)
+        {
+            for (x = 0; x < inputx; x++)
+            {
+                Stage[x, y] = 0;
+            }
+        }
+
+        end = false;
+
+        for (int n = 0; n < 3; n++)
+        {
+            goaldata[n] = 0;
+        }
+
+        cnt = 0;
+
+        Array.Resize(ref rist, 0);
+        Array.Resize(ref rist, 1);
     }
 }
