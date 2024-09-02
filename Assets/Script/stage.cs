@@ -24,7 +24,6 @@ public class stage : MonoBehaviour
 
     public GameObject stageblockA;
     public GameObject stageblockB;
-    public GameObject goal;
 
     public GameObject enemyA;
 
@@ -75,7 +74,9 @@ public class stage : MonoBehaviour
             }
         }
 
-        Stage[goaldata[0], goaldata[1]] = 3;
+        Vector2 goalpos = new Vector2((inputx - 1 - goaldata[0]) * 20 - 7, (inputy - 1 - goaldata[1]) * 20 - 7);
+        GameObject.Find("Goal").GetComponent<Transform>().position = goalpos;
+
         if (Stage[start[0], start[1]] == 1)
         {
             Stage[start[0], start[1]] = -1;
@@ -102,12 +103,6 @@ public class stage : MonoBehaviour
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
                     GameObject boxB = Instantiate(stageblockB, pos, Quaternion.identity);
                     boxB.transform.parent = transform;
-                }
-                else if (Stage[x, y] == 3)
-                {
-                    Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
-                    GameObject goalpos = Instantiate(goal, pos, Quaternion.identity);
-                    goalpos.transform.parent = transform;
                 }
             }
         }
