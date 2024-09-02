@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 public class Human1 : MonoBehaviour
@@ -83,8 +84,9 @@ public class Human1 : MonoBehaviour
 
         if (health <= 0)
         {
-            Debug.Log("Player is dead!");
+            //Debug.Log("Player is dead!");
             gameObject.SetActive(false);
+            SceneManager.LoadScene("Dead");
         }
     }
 
