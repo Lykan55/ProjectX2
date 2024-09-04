@@ -67,6 +67,8 @@ public class Human1 : MonoBehaviour
         float playerY = transform.position.y - 3;
         float contactY = collision.transform.position.y;
 
+        TakeDamege();
+        /*
         if (playerY > contactY)
         {
             Destroy(collision.gameObject);
@@ -76,6 +78,7 @@ public class Human1 : MonoBehaviour
         {
             TakeDamege();
         }
+        */
     }
 
     private void TakeDamege()
