@@ -24,8 +24,7 @@ public class stage : MonoBehaviour
 
     public GameObject stageblockA;
     public GameObject stageblockB;
-
-    public GameObject enemyA;
+    public GameObject stageblockC;
 
     void Start()
     {
@@ -77,11 +76,6 @@ public class stage : MonoBehaviour
         Vector2 goalpos = new Vector2((inputx - 1 - goaldata[0]) * 20 - 7, (inputy - 1 - goaldata[1]) * 20 - 7);
         GameObject.Find("Goal").GetComponent<Transform>().position = goalpos;
 
-        if (Stage[start[0], start[1]] == 1)
-        {
-            Stage[start[0], start[1]] = -1;
-        }
-
         for (y = 0; y < inputy; y++)
         {
             for (x = 0; x < inputx; x++)
@@ -91,18 +85,24 @@ public class stage : MonoBehaviour
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
                     GameObject boxA = Instantiate(stageblockA, pos, Quaternion.identity);
                     boxA.transform.parent = transform;
+
+                    GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
+                    boxC.transform.parent = transform;
                 }
                 else if (Stage[x, y] == 1)
                 {
-                    Vector2 pos = new Vector2((inputx - 1 - x) * 20 + 5, (inputy - 1 - y) * 20);
-                    GameObject enemy = Instantiate(enemyA, pos, Quaternion.identity);
-                    enemy.transform.parent = transform;
+                    Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
+                    GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
+                    boxC.transform.parent = transform;
                 }
                 else if (Stage[x, y] == 2)
                 {
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
                     GameObject boxB = Instantiate(stageblockB, pos, Quaternion.identity);
                     boxB.transform.parent = transform;
+
+                    GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
+                    boxC.transform.parent = transform;
                 }
             }
         }
