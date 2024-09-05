@@ -137,7 +137,7 @@ public class ItemManager : MonoBehaviour
 
     public void Arrow()//矢印アイテム処理
     {
-        //Arrowスクリプトを参照
+        //GoalDirectionItemスクリプトを参照
         goalDirectionItem.UseGoalDirectionItem(); // ゴールの方向を表示するメソッドを呼び出す
     }
 }

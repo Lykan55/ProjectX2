@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GoalDirectionItem : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class GoalDirectionItem : MonoBehaviour
             Vector2 screenPos = WorldToScreenDirection(direction);
 
             // 矢印を回転させてゴールの方向を指すようにする
-            float angle = Mathf.Atan2(screenPos.y, screenPos.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(screenPos.x, screenPos.y) * Mathf.Rad2Deg*-1;
             arrowUI.rotation = Quaternion.Euler(0, 0, angle);
 
             // 矢印をプレイヤーに追従させる
