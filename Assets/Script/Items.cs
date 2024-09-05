@@ -11,7 +11,11 @@ public class ItemManager : MonoBehaviour
     public float newOrthoSize = 10f;
     private float originalOrthoSize;
 
+    //矢印アイテムに関係
+    public GoalDirectionItem goalDirectionItem; // ゴール方向アイテムを管理するスクリプトの参照
+    
 
+    //アイテム選択の乱数に使用
     public List<Sprite> itemImages; // アイテム画像のリストをInspectorで設定
     public Image[] itemSlots; // アイテムを表示するUI Imageオブジェクトの配列
 
@@ -100,23 +104,40 @@ public class ItemManager : MonoBehaviour
 
             Debug.Log($"Using item in slot {slotIndex}: {itemName}"); // デバッグログを追加
 
-            // アイテムの使用処理をここに追加
+            // アイテムのメソッドをここに追加
             if (itemName == "Lens")
             {
-                if (virtualCamera != null)
-                {
-                    // Ortho Sizeを変更
-                    virtualCamera.m_Lens.OrthographicSize = newOrthoSize;
-
-                    // 5秒後に元に戻すCoroutineを開始
-                    StartCoroutine(ResetOrthoSizeAfterDelay(5f));
-                }
+                Lens();
             }
-            // ここでアイテムの具体的な使用処理を実装
+            else if (itemName == "ArrowItem")
+            {
+                Arrow();
+            }
         }
         else
         {
             Debug.Log("No item in this slot.");
         }
+    }
+
+
+    //アイテムの処理
+    public void Lens()//視野角変更アイテム処理
+    {
+        if (virtualCamera != null)
+        {
+            // Ortho Sizeを変更
+            virtualCamera.m_Lens.OrthographicSize = newOrthoSize;
+
+            // 5秒後に元に戻すCoroutineを開始
+            StartCoroutine(ResetOrthoSizeAfterDelay(5f));
+        }
+    }
+
+
+    public void Arrow()//矢印アイテム処理
+    {
+        //Arrowスクリプトを参照
+        goalDirectionItem.UseGoalDirectionItem(); // ゴールの方向を表示するメソッドを呼び出す
     }
 }
