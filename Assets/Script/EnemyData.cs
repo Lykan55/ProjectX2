@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class EnemyData : MonoBehaviour
@@ -7,12 +8,14 @@ public class EnemyData : MonoBehaviour
     public Vector3 EnemyCurrPos = new Vector2();
     public Vector3 EnemyPrePos = new Vector2();
     GameObject Player;
+    private float StartTime;
 
 
     private void Start()
     {
         Player = GameObject.Find("Human 1");
         EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerPrePos;
+        EnemyPrePos = EnemyCurrPos;
     }
 
     private void Update()
@@ -25,69 +28,20 @@ public class EnemyData : MonoBehaviour
             {
                 EnemyPrePos = EnemyCurrPos;
                 EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerPrePos;
-            }
-
-            Invoke(nameof(Move), 0.5f);
-
-            if (EnemyCurrPos == transform.position)
-            {
-                Player.GetComponent<PlayerData>().Movement = false;
+                StartTime = Time.timeSinceLevelLoad;
             }
         }
-    }
-
-    private void Move()
-    {
-        Vector3 pos = transform.position;
-
-        int Ans = Destination();
-        switch (Ans)
+        else if (GetComponent<EnemyTimer>().Timer >= 5)
         {
-            case 12:
-                pos.y += 0.5f;
-                break;
-            case 3:
-                pos.x += 0.5f;
-                break;
-            case 6:
-                pos.y -= 0.5f;
-                break;
-            case 9:
-                pos.x -= 0.5f;
-                break;
-        }
-
-        transform.position = pos;
-    }
-
-    private int Destination()
-    {
-        int Ans;
-
-        if (EnemyCurrPos.x == transform.position.x)
-        {
-            if (EnemyCurrPos.y > transform.position.y)
+            if (EnemyCurrPos != Player.GetComponent<PlayerData>().PlayerCurrPos)
             {
-                Ans = 12;
-            }
-            else
-            {
-                Ans = 6;
-            }
-        }
-        else
-        {
-            if (EnemyCurrPos.x > transform.position.x)
-            {
-                Ans = 3;
-            }
-            else
-            {
-                Ans = 9;
+                EnemyPrePos = EnemyCurrPos;
+                EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerCurrPos;
+                StartTime = Time.timeSinceLevelLoad;
             }
         }
 
-        return Ans;
+        Move();
     }
 
     private void Directions()
@@ -102,6 +56,18 @@ public class EnemyData : MonoBehaviour
         {
             localScale.x *= -1;
             transform.localScale = localScale;
+        }
+    }
+
+    private void Move()
+    {
+        var rate = (Time.timeSinceLevelLoad - StartTime) / 1;
+
+        transform.position = Vector3.Lerp(EnemyPrePos, EnemyCurrPos, rate);
+
+        if (EnemyCurrPos == transform.position)
+        {
+            Player.GetComponent<PlayerData>().Movement = false;
         }
     }
 }
