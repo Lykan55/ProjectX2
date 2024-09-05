@@ -31,7 +31,7 @@ public class PlayerData : MonoBehaviour
 
     private void Summon()
     {
-        Vector2 pos = new Vector2(PlayerPrePos.x, PlayerPrePos.y);
+        Vector3 pos = new Vector3(PlayerPrePos.x, PlayerPrePos.y);
         GameObject boxB = Instantiate(Enemy, pos, Quaternion.identity);
         Summon1 = false;
     }

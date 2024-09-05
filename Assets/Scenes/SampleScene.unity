@@ -726,10 +726,6 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 501945767}
-  m_EditorHideFlags: 0
-  m_EditorClassIdentifier: 
-  virtualCamera: {fileID: 555479384}
-  newOrthoSize: 50
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55d65dfa979886c43a89ff7df3f0a79f, type: 3}
