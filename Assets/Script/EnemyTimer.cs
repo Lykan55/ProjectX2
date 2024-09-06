@@ -13,13 +13,6 @@ public class EnemyTimer : MonoBehaviour
     }
     private void Update()
     {
-        if (Player.GetComponent<PlayerData>().Movement == true)
-        {
-            Timer = 0.0f;
-        }
-        else
-        {
-            Timer += Time.deltaTime;
-        }
+        Timer += Time.deltaTime;
     }
 }

@@ -11,12 +11,14 @@ public class PlayerData : MonoBehaviour
     public bool Movement = false;
     private bool Summon1 = true;
     private bool Summon2 = false;
+    private List<Vector3> PosList = new List<Vector3>();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Area")
         {
             PlayerPrePos = PlayerCurrPos;
+
             if (Summon1 == true && Summon2 == true)
             {
                 Invoke(nameof(Summon), 0.5f);
@@ -24,6 +26,8 @@ public class PlayerData : MonoBehaviour
             Summon2 = true;
 
             PlayerCurrPos = collision.transform.position;
+
+            PosList.Add(PlayerCurrPos);
 
             Movement = true;
         }

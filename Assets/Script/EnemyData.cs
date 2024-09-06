@@ -9,7 +9,8 @@ public class EnemyData : MonoBehaviour
     public Vector3 EnemyPrePos = new Vector2();
     GameObject Player;
     private float StartTime;
-
+    private List<Vector3> PosList = new List<Vector3>();
+    private int ListNum = 0;
 
     private void Start()
     {
@@ -24,21 +25,14 @@ public class EnemyData : MonoBehaviour
 
         if (Player.GetComponent<PlayerData>().Movement == true)
         {
-            if (EnemyCurrPos != Player.GetComponent<PlayerData>().PlayerPrePos)
-            {
-                EnemyPrePos = EnemyCurrPos;
-                EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerPrePos;
-                StartTime = Time.timeSinceLevelLoad;
-            }
+            PosList.Add(Player.GetComponent<PlayerData>().PlayerPrePos);
+            GetComponent<EnemyTimer>().Timer = 0.0f;
+            Player.GetComponent<PlayerData>().Movement = false;
         }
-        else if (GetComponent<EnemyTimer>().Timer >= 5)
+        else if (GetComponent<EnemyTimer>().Timer >= 5.0f)
         {
-            if (EnemyCurrPos != Player.GetComponent<PlayerData>().PlayerCurrPos)
-            {
-                EnemyPrePos = EnemyCurrPos;
-                EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerCurrPos;
-                StartTime = Time.timeSinceLevelLoad;
-            }
+            PosList.Add(Player.GetComponent<PlayerData>().PlayerCurrPos);
+            GetComponent<EnemyTimer>().Timer = 0.0f;
         }
 
         Move();
@@ -47,12 +41,7 @@ public class EnemyData : MonoBehaviour
     private void Directions()
     {
         Vector3 localScale = transform.localScale;
-        if (localScale.x < 0 && Player.transform.position.x < transform.position.x)
-        {
-            localScale.x *= -1;
-            transform.localScale = localScale;
-        }
-        else if (localScale.x > 0 && transform.position.x < Player.transform.position.x)
+        if (localScale.x < 0 && Player.transform.position.x < transform.position.x || localScale.x > 0 && transform.position.x < Player.transform.position.x)
         {
             localScale.x *= -1;
             transform.localScale = localScale;
@@ -65,9 +54,12 @@ public class EnemyData : MonoBehaviour
 
         transform.position = Vector3.Lerp(EnemyPrePos, EnemyCurrPos, rate);
 
-        if (EnemyCurrPos == transform.position)
+        if (transform.position == EnemyCurrPos && ListNum < PosList.Count - 1)
         {
-            Player.GetComponent<PlayerData>().Movement = false;
+            ListNum++;
+            EnemyPrePos = EnemyCurrPos;
+            EnemyCurrPos = PosList[ListNum];
+            StartTime = Time.timeSinceLevelLoad;
         }
     }
 }
