@@ -21,7 +21,7 @@ public class PlayerData : MonoBehaviour
 
             if (Summon1 == true && Summon2 == true)
             {
-                Invoke(nameof(Summon), 0.5f);
+                Invoke(nameof(Summon), 0.1f);
             }
             Summon2 = true;
 

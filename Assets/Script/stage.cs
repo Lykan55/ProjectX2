@@ -73,7 +73,7 @@ public class stage : MonoBehaviour
             }
         }
 
-        Vector2 goalpos = new Vector2((inputx - 1 - goaldata[0]) * 20 - 7, (inputy - 1 - goaldata[1]) * 20 - 7);
+        Vector2 goalpos = new Vector2((inputx - 1 - goaldata[0]) * 20, (inputy - 1 - goaldata[1]) * 20 - 7);
         GameObject.Find("Goal").GetComponent<Transform>().position = goalpos;
 
         for (y = 0; y < inputy; y++)

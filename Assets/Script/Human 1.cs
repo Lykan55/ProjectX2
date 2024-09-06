@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class Human1 : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class Human1 : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Floor")
+        if (collision.gameObject.tag == "Floor" && collision.transform.position.y < transform.position.y - 3)
         {
             bJump = false;   //もう一度ジャンプできるように
             anim.SetBool("Jump", bJump);
@@ -104,6 +105,7 @@ public class Human1 : MonoBehaviour
         {
             return; //キーが押されていない時に下の処理が実行されない命令
         }
+
         rigid.AddForce(Vector2.up * JumpSpeed, ForceMode2D.Impulse);//AddForce:加速処理
         bJump = true;
         anim.SetBool("Jump", bJump);
