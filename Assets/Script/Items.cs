@@ -138,16 +138,14 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    //視野角変更処理
-    IEnumerator ResetOrthoSizeAfterDelay(float delay)
+    
+    IEnumerator ResetOrthoSizeAfterDelay(float delay)//視野角変更処理
     {
         // 指定した時間だけ待機
         yield return new WaitForSeconds(delay);
 
         // Ortho Sizeを元に戻す
         virtualCamera.m_Lens.OrthographicSize = originalOrthoSize;
-        ItemCheck = true;
-
     }
 
 
@@ -156,6 +154,5 @@ public class ItemManager : MonoBehaviour
         ItemCheck = false;
         //GoalDirectionItemスクリプトを参照
         goalDirectionItem.UseGoalDirectionItem(); // ゴールの方向を表示するメソッドを呼び出す
-        //ItemCheck = true;
     }
 }
