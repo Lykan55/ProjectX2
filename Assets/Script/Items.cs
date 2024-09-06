@@ -6,6 +6,9 @@ using System.Collections;
 
 public class ItemManager : MonoBehaviour
 {
+    //アイテムの複数使用制限用
+    public bool ItemCheck = true;
+
     //視野角変更に使用する
     public CinemachineVirtualCamera virtualCamera;
     public float newOrthoSize = 10f;
@@ -13,7 +16,7 @@ public class ItemManager : MonoBehaviour
 
     //矢印アイテムに関係
     public GoalDirectionItem goalDirectionItem; // ゴール方向アイテムを管理するスクリプトの参照
-    
+
 
     //アイテム選択の乱数に使用
     public List<Sprite> itemImages; // アイテム画像のリストをInspectorで設定
@@ -50,15 +53,7 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    //視野角変更処理
-    IEnumerator ResetOrthoSizeAfterDelay(float delay)
-    {
-        // 指定した時間だけ待機
-        yield return new WaitForSeconds(delay);
-
-        // Ortho Sizeを元に戻す
-        virtualCamera.m_Lens.OrthographicSize = originalOrthoSize;
-    }
+    
 
     void SelectItems()
     {
@@ -97,33 +92,42 @@ public class ItemManager : MonoBehaviour
 
     void UseItem(int slotIndex)
     {
-        if (slotIndex >= 0 && slotIndex < selectedItems.Count)
+        if (ItemCheck == true)
         {
-            Sprite item = selectedItems[slotIndex];
-            string itemName = item.name; // アイテムの名前を取得
-
-            Debug.Log($"Using item in slot {slotIndex}: {itemName}"); // デバッグログを追加
-
-            // アイテムのメソッドをここに追加
-            if (itemName == "Lens")
+            if (slotIndex >= 0 && slotIndex < selectedItems.Count)
             {
-                Lens();
+                Sprite item = selectedItems[slotIndex];
+                string itemName = item.name; // アイテムの名前を取得
+                Debug.Log($"Using item in slot {slotIndex}: {itemName}"); // デバッグログを追加
+
+                // アイテムのメソッドをここに追加
+
+                if (itemName == "Lens")
+                {
+                    Lens();
+                }
+                else if (itemName == "ArrowItem")
+                {
+                    Arrow();
+                }
             }
-            else if (itemName == "ArrowItem")
+            else
             {
-                Arrow();
+                Debug.Log("アイテムスロットにアイテムがありません");
             }
         }
-        else
+        else if (ItemCheck != true)
         {
-            Debug.Log("No item in this slot.");
+            Debug.Log("同時に複数のアイテムを使用できません");
         }
+          
     }
 
 
     //アイテムの処理
     public void Lens()//視野角変更アイテム処理
     {
+        ItemCheck = false;
         if (virtualCamera != null)
         {
             // Ortho Sizeを変更
@@ -134,10 +138,24 @@ public class ItemManager : MonoBehaviour
         }
     }
 
+    //視野角変更処理
+    IEnumerator ResetOrthoSizeAfterDelay(float delay)
+    {
+        // 指定した時間だけ待機
+        yield return new WaitForSeconds(delay);
+
+        // Ortho Sizeを元に戻す
+        virtualCamera.m_Lens.OrthographicSize = originalOrthoSize;
+        ItemCheck = true;
+
+    }
+
 
     public void Arrow()//矢印アイテム処理
     {
+        ItemCheck = false;
         //GoalDirectionItemスクリプトを参照
         goalDirectionItem.UseGoalDirectionItem(); // ゴールの方向を表示するメソッドを呼び出す
+        //ItemCheck = true;
     }
 }
