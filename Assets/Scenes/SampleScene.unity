@@ -1371,13 +1371,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f520986c9c8668b47b452be0ac53364b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ItemCheck: 1
   virtualCamera: {fileID: 555479384}
   newOrthoSize: 50
   goalDirectionItem: {fileID: 703440355}
   itemImages:
   - {fileID: 21300000, guid: 4b2a6a624bc598f49bac40f0cbcb6378, type: 3}
   - {fileID: 21300000, guid: 08b10c3ed212b814e92f8928bc8981ec, type: 3}
-  - {fileID: 21300000, guid: f85bc23080253934daced018e963b9bf, type: 3}
   - {fileID: 21300000, guid: b54399b370ae967488d75c3527f078b7, type: 3}
   itemSlots:
   - {fileID: 4095745}
@@ -1395,6 +1395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9653f8b8c17846f4cb0f4dcdd753d261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemManager: {fileID: 703440354}
   player: {fileID: 501945772}
   goal: {fileID: 517191072}
   arrowUI: {fileID: 1869075531}
@@ -1475,7 +1476,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

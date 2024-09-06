@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class GoalDirectionItem : MonoBehaviour
 {
+    public ItemManager itemManager;
     public Transform player;
     public Transform goal;
     public RectTransform arrowUI; // –îˆóUI (Image‚Æ‚µ‚Äİ’è)
