@@ -591,7 +591,7 @@ GameObject:
   - component: {fileID: 501945779}
   m_Layer: 0
   m_Name: Human 1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1273,7 +1273,7 @@ Transform:
   m_GameObject: {fileID: 606131105}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 98.50361, y: 111.76501, z: -0.9017039}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1371,6 +1371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f520986c9c8668b47b452be0ac53364b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ItemCheck: 1
   virtualCamera: {fileID: 555479384}
   newOrthoSize: 50
   goalDirectionItem: {fileID: 703440355}
@@ -1395,6 +1396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9653f8b8c17846f4cb0f4dcdd753d261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Items: {fileID: 0}
   player: {fileID: 501945772}
   goal: {fileID: 517191072}
   arrowUI: {fileID: 1869075531}
