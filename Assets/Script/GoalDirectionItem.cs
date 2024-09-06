@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class GoalDirectionItem : MonoBehaviour
 {
+    public ItemManager Items;
     public Transform player;
     public Transform goal;
     public RectTransform arrowUI; // 矢印UI (Imageとして設定)
@@ -32,6 +33,7 @@ public class GoalDirectionItem : MonoBehaviour
 
             // 数秒後にUIを非表示にするコルーチンを開始
             StartCoroutine(HideArrowAfterTime(3f)); // 3秒後に消える
+            Items.ItemCheck = true;
         }
     }
 
