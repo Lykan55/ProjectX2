@@ -158,6 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyCurrPos: {x: 0, y: 0, z: 0}
   EnemyPrePos: {x: 0, y: 0, z: 0}
+  Return: 0
 --- !u!114 &8052048125064367012
 MonoBehaviour:
   m_ObjectHideFlags: 0

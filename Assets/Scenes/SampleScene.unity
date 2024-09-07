@@ -589,6 +589,7 @@ GameObject:
   - component: {fileID: 501945775}
   - component: {fileID: 501945778}
   - component: {fileID: 501945779}
+  - component: {fileID: 501945780}
   m_Layer: 0
   m_Name: Human 1
   m_TagString: Player
@@ -887,6 +888,20 @@ MonoBehaviour:
   PlayerCurrPos: {x: 0, y: 0, z: 0}
   PlayerPrePos: {x: 0, y: 0, z: 0}
   Movement: 0
+  Return: 0
+--- !u!114 &501945780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501945767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da752f6a018c4743aa5cff09aa60e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Return: 0
 --- !u!1 &517191068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,8 +1392,8 @@ MonoBehaviour:
   goalDirectionItem: {fileID: 703440355}
   itemImages:
   - {fileID: 21300000, guid: 4b2a6a624bc598f49bac40f0cbcb6378, type: 3}
-  - {fileID: 21300000, guid: 08b10c3ed212b814e92f8928bc8981ec, type: 3}
   - {fileID: 21300000, guid: b54399b370ae967488d75c3527f078b7, type: 3}
+  - {fileID: 21300000, guid: f85bc23080253934daced018e963b9bf, type: 3}
   itemSlots:
   - {fileID: 4095745}
   - {fileID: 102793725}
