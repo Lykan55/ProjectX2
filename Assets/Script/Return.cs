@@ -11,64 +11,88 @@ public class Return : MonoBehaviour
     private TimeList[] PlayerList;
     private List<Vector3> EnemyList;
 
-    private float StartTime;
-    private int Cnt;
+    private int PLCnt;
+    private int ELCnt;
     private int PosCnt;
 
-    private Vector3 CurrPos;
-    private Vector3 PrePos;
+    private Vector3 TargetPos;
+
+    private bool Flag = false;
 
     private void Start()
     {
         Player = GameObject.Find("Human 1");
-        Enemy = GameObject.Find("enemy 0");
-
-        PlayerList = Player.GetComponent<TimeWarp>().TimeList;
-        EnemyList = Enemy.GetComponent<EnemyData>().PosList;
-
-        Cnt = PlayerList.Length - 1;
-        PosCnt = PlayerList[Cnt].Poslist.Count - 1;
+        Enemy = GameObject.Find("enemy 0(Clone)");
 
         Player.GetComponent<PlayerData>().Return = true;
         Player.GetComponent<TimeWarp>().Return = true;
+        Enemy.GetComponent<EnemyData>().Return = true;
 
-        StartTime = Time.timeSinceLevelLoad;
+        PlayerList = Player.GetComponent<TimeWarp>().TimeList;
+        EnemyList = Enemy.GetComponent<EnemyData>().PosList;
+        EnemyList.RemoveAt(EnemyList.Count - 1);
 
-        CurrPos = PlayerList[Cnt].Poslist[PosCnt];
-        PrePos = PlayerList[Cnt].Poslist[PosCnt - 1];
+        PLCnt = PlayerList.Length - 1;
+        ELCnt = EnemyList.Count - 1;
+        PosCnt = PlayerList[PLCnt].Poslist.Count - 1;
+
+        TargetPos = PlayerList[PLCnt].Poslist[PosCnt];
     }
     private void Update()
     {
-        Move();
+        EnemyMove();
+        PlayerMove();
+
+        if (Flag)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
-    private void Move()
+    private void PlayerMove()
     {
-        var rate = (Time.timeSinceLevelLoad - StartTime) / 0.1f;
+        Player.transform.position = Vector3.MoveTowards(Player.transform.position, TargetPos, 0.5f);
 
-        Player.GetComponent<Transform>().position = Vector3.Lerp(CurrPos, PrePos, rate);
-
-        if (Player.transform.position == PrePos)
+        if (Player.transform.position == TargetPos)
         {
-            PlayerList[Cnt].Poslist.RemoveAt(PosCnt);
-            PosCnt = PlayerList[Cnt].Poslist.Count - 1;
+            PlayerList[PLCnt].Poslist.RemoveAt(PosCnt);
+
             if (PosCnt == 0)
             {
-                if (Cnt == 0)
+                if (PLCnt == 0)
                 {
                     Player.GetComponent<TimeWarp>().TimeList = PlayerList;
+                    Enemy.GetComponent<EnemyData>().PosList = EnemyList;
                     Player.GetComponent<PlayerData>().Return = false;
                     Player.GetComponent<TimeWarp>().Return = false;
-                    Destroy(this.gameObject);
+                    Enemy.GetComponent<EnemyData>().Return = false;
+                    Flag = true;
+                    Debug.Log("a");
                 }
                 else
                 {
-                    Cnt--;
+                    Debug.Log("S");
+                    ELCnt--;
+                    PLCnt--;
+                    EnemyList.RemoveAt(EnemyList.Count - 1);
                 }
             }
-            CurrPos = PrePos;
-            PrePos = PlayerList[Cnt].Poslist[PosCnt - 1];
-            StartTime = Time.timeSinceLevelLoad;
+
+            if (!Flag)
+            {
+                PosCnt = PlayerList[PLCnt].Poslist.Count - 1;
+                Debug.Log($"PosCnt:{PosCnt}");
+                TargetPos = PlayerList[PLCnt].Poslist[PosCnt];
+                Debug.Log($"PLCnt:{PLCnt}");
+            }
+        }
+    }
+
+    private void EnemyMove()
+    {
+        if (ELCnt >= 0)
+        {
+            Enemy.transform.position = Vector3.MoveTowards(Enemy.transform.position, EnemyList[ELCnt], 1.0f);
         }
     }
 }

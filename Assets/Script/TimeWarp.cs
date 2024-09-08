@@ -1,46 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class TimeWarp : MonoBehaviour
 {
-    public TimeList[] TimeList = new TimeList[3];
+    public TimeList[] TimeList = new TimeList[4];
     private int ListCnt = 0;
     public bool Return = false;
 
+    private void Start()
+    {
+        for (int i = 0; i < TimeList.Length; i++)
+        {
+            TimeList[i] = new TimeList();
+        }
+    }
+
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space) && !Return)
+        if (Input.GetKeyDown(KeyCode.Space) && !Return)
         {
             Invoke("InputList", 0.3f);
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Area" && !Return)
         {
             CntControl();
-            TimeList[ListCnt].Poslist.Add(collision.transform.position);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Floor" && !Return)
         {
-            TimeList[ListCnt].Poslist.Add(collision.transform.position);
+            TimeList[ListCnt].Poslist.Add(transform.position);
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Floor" && !Return)
         {
-            TimeList[ListCnt].Poslist.Add(collision.transform.position);
+            TimeList[ListCnt].Poslist.Add(transform.position);
         }
     }
 
 
 
-    private void CntControl()
+    public void CntControl()
     {
         ListCnt++;
 
@@ -52,8 +60,10 @@ public class TimeWarp : MonoBehaviour
                 TimeList[ListCnt] = TimeList[ListCnt + 1];
                 ListCnt++;
             }
-            TimeList[ListCnt] = null;
+            TimeList[ListCnt] = new TimeList();
         }
+
+        TimeList[ListCnt].Poslist.Add(transform.position);
     }
     private void InputList()
     {
@@ -64,5 +74,5 @@ public class TimeWarp : MonoBehaviour
 
 public class TimeList
 {
-    public List<Vector3> Poslist;
+    public List<Vector3> Poslist = new List<Vector3>();
 }

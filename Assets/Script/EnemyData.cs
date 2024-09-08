@@ -36,6 +36,7 @@ public class EnemyData : MonoBehaviour
             {
                 PosList.Add(Player.GetComponent<PlayerData>().PlayerCurrPos);
                 GetComponent<EnemyTimer>().Timer = 0.0f;
+                Player.GetComponent<TimeWarp>().CntControl();
             }
 
             Move();
