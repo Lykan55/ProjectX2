@@ -10,22 +10,27 @@ public class PlayerData : MonoBehaviour
     public Vector3 PlayerPrePos = new Vector2();
     public bool Movement = false;
     public bool Return = false;
-    private List<Vector3> PosList = new List<Vector3>();
+    private bool Summon1 = false;
+    private bool Summon2 = true;
+    private Collider2D ReturnPos;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        ReturnPos = collision.GetComponent<Collider2D>();
+
         if (collision.tag == "Area" && !Return)
         {
             PlayerPrePos = PlayerCurrPos;
 
-            if (PosList.Count == 1)
+            if (Summon1 && Summon2)
             {
                 Invoke(nameof(Summon), 0.8f);
+                Summon2 = false;
             }
 
-            PlayerCurrPos = collision.transform.position;
+            Summon1 = true;
 
-            PosList.Add(PlayerCurrPos);
+            PlayerCurrPos = collision.transform.position;
 
             Movement = true;
         }
@@ -35,5 +40,17 @@ public class PlayerData : MonoBehaviour
     {
         Vector3 pos = new Vector3(PlayerPrePos.x, PlayerPrePos.y);
         GameObject boxB = Instantiate(Enemy, pos, Quaternion.identity);
+    }
+
+    public void SetData()
+    {
+        PlayerCurrPos = ReturnPos.transform.position;
+        PlayerPrePos = PlayerCurrPos;
+    }
+
+    public void SummonFlag()
+    {
+        Summon1 = true;
+        Summon2 = true;
     }
 }

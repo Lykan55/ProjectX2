@@ -8,10 +8,9 @@ public class aaaaaaa : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K))
         {
             GameObject aaaaaa = Instantiate(aaa);
-            Destroy(this.gameObject);
         }
     }
 }

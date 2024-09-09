@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -5,16 +6,13 @@ using UnityEngine;
 
 public class TimeWarp : MonoBehaviour
 {
-    public TimeList[] TimeList = new TimeList[4];
-    private int ListCnt = 0;
+    public List<TimeList> Timelist = new List<TimeList>();
     public bool Return = false;
 
     private void Start()
     {
-        for (int i = 0; i < TimeList.Length; i++)
-        {
-            TimeList[i] = new TimeList();
-        }
+        TimeList Poslist = new TimeList();
+        Timelist.Add(Poslist);
     }
 
     void Update()
@@ -28,6 +26,7 @@ public class TimeWarp : MonoBehaviour
     {
         if (collision.tag == "Area" && !Return)
         {
+            Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
             CntControl();
         }
     }
@@ -35,14 +34,14 @@ public class TimeWarp : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor" && !Return)
         {
-            TimeList[ListCnt].Poslist.Add(transform.position);
+            Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Floor" && !Return)
         {
-            TimeList[ListCnt].Poslist.Add(transform.position);
+            Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
         }
     }
 
@@ -50,24 +49,13 @@ public class TimeWarp : MonoBehaviour
 
     public void CntControl()
     {
-        ListCnt++;
-
-        if (ListCnt >= TimeList.Length)
-        {
-            ListCnt = 0;
-            while (ListCnt != TimeList.Length - 1)
-            {
-                TimeList[ListCnt] = TimeList[ListCnt + 1];
-                ListCnt++;
-            }
-            TimeList[ListCnt] = new TimeList();
-        }
-
-        TimeList[ListCnt].Poslist.Add(transform.position);
+        TimeList Poslist = new TimeList();
+        Timelist.Add(Poslist);
+        Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
     }
     private void InputList()
     {
-        TimeList[ListCnt].Poslist.Add(transform.position);
+        Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
     }
 
 }
