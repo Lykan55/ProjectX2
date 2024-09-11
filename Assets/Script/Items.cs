@@ -10,7 +10,7 @@ public class ItemManager : MonoBehaviour
     // Human1を取得
     public GameObject player;
 
-    public GameObject WallDestroy;
+    public GameObject wallDestroy;
 
     public float searchPosition = 40f;  // n方向のチャンクの検索数値
 
@@ -156,7 +156,7 @@ public class ItemManager : MonoBehaviour
                 }
                 else if (itemName == "WallDestroy")
                 {
-                    //WallDestroy();
+                    WallDestroy();
                 }
             }
             else
@@ -200,14 +200,21 @@ public class ItemManager : MonoBehaviour
         ItemCheck = true;
     }
 
-    
 
-
-
-
-
-
-
+    public void  WallDestroy()// 壁破壊アイテム処理
+    {
+        if (isDPressed)
+        {
+            Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + 20f, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+            Instantiate(wallDestroy, pos, Quaternion.identity);
+        }
+        else if (isAPressed)
+        {
+            Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - 20f, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+            Instantiate(wallDestroy, pos, Quaternion.identity);
+        }
+        ItemCheck = true;
+    }
 
     /*
     public void WallDestroy() // 壁破壊アイテム処理

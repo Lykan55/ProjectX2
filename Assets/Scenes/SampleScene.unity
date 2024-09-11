@@ -1373,21 +1373,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 501945767}
+  wallDestroy: {fileID: 3020431721527018169, guid: 458027ebf6f1b544f8fbb945444f29e4, type: 3}
   searchPosition: 40
-  DestroyPosition: 20
+  isWPressed: 0
+  isAPressed: 0
+  isSPressed: 0
+  isDPressed: 0
   targetTagPlusX: 
   targetTagMinusX: 
-  targetTagPlusY: 
-  targetTagMinusY: 
-  DestroyPlusX: {fileID: 0}
-  DestroyMinusX: {fileID: 0}
-  DestroyPlusY: {fileID: 0}
-  DestroyMinusY: {fileID: 0}
   AreaPlusX: {fileID: 0}
   AreaMinusX: {fileID: 0}
-  AreaPlusY: {fileID: 0}
-  AreaMinusY: {fileID: 0}
-  Area: {fileID: 6074760717865509908, guid: eb39fd95b439c7f41a328f23bba4fe6e, type: 3}
+  targetAreaTagPlusX: 
+  targetAreaTagMinusX: 
   Objectlayer:
     serializedVersion: 2
     m_Bits: 64
