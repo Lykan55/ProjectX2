@@ -14,16 +14,18 @@ public class Return : MonoBehaviour
     private List<Vector3> EnemyList;
 
     private int PLCnt;
-    private int ELCnt;
+    public int ELCnt;
     private int PPosCnt;
     private int EPosCnt;
 
-    private int EndCnt;
+    private int PlayerEndCnt;
+    public bool EnemyEndCnt = false;
 
-    private Vector3 TargetPos;
+    private Vector3 PlayerTargetPos;
+    private Vector3 EnemyTargetPos;
 
     private bool Flag = false;
-    private bool Go = false;
+    private bool EnemyFlag = true;
 
     private void Start()
     {
@@ -37,13 +39,13 @@ public class Return : MonoBehaviour
         PLCnt = PlayerList.Count - 1;
         PPosCnt = PlayerList[PLCnt].Poslist.Count - 1;
 
-        TargetPos = PlayerList[PLCnt].Poslist[PPosCnt];
+        PlayerTargetPos = PlayerList[PLCnt].Poslist[PPosCnt];
 
-        EndCnt = ReturnCnt + 1;
+        PlayerEndCnt = ReturnCnt + 1;
 
-        if (PLCnt + 1 < EndCnt)
+        if (PLCnt + 1 < PlayerEndCnt)
         {
-            EndCnt = PLCnt + 1;
+            PlayerEndCnt = PLCnt + 1;
         }
 
         try
@@ -57,13 +59,21 @@ public class Return : MonoBehaviour
 
             ELCnt = EnemyList.Count - 1;
             EPosCnt = ReturnCnt;
-            Debug.Log($"Farst ELCnt:{ELCnt}");
-            Debug.Log($"Farst ELCnt:{ELCnt}");
-            Debug.Log($"Farst EPosCnt:{EPosCnt}");
+
+            if (ELCnt >= 0)
+            {
+                EnemyTargetPos = EnemyList[ELCnt];
+            }
+
+            if (ELCnt + 1 < EPosCnt)
+            {
+                EPosCnt = ELCnt + 1;
+                EnemyEndCnt = true;
+            }
         }
         catch
         {
-
+            EnemyFlag = false;
         }
     }
     private void Update()
@@ -79,61 +89,31 @@ public class Return : MonoBehaviour
 
     private void PlayerMove()
     {
-        Player.transform.position = Vector3.MoveTowards(Player.transform.position, TargetPos, 0.5f);
+        Player.transform.position = Vector3.MoveTowards(Player.transform.position, PlayerTargetPos, 0.5f);
 
-        if (Player.transform.position == TargetPos && Go)
+        if (Player.transform.position == PlayerTargetPos)
         {
-            Go = false;
-
             PlayerList[PLCnt].Poslist.RemoveAt(PPosCnt);
 
             if (PPosCnt == 0)
             {
-                try
+                PlayerEndCnt--;
+                if (PlayerEndCnt > 0)
                 {
-                    EndCnt--;
+                    PlayerList.RemoveAt(PLCnt);
                     PLCnt--;
-                    EPosCnt--;
-                    Debug.Log($"ELCnt:{ELCnt}");
-                    Debug.Log($"EPosCnt:{EPosCnt}");
                 }
-                catch
+                else if (PlayerEndCnt == 0)
                 {
-
-                }
-
-                if (EPosCnt > 0)
-                {
-                    try
-                    {
-                    ELCnt--;
-                    EnemyList.RemoveAt(EnemyList.Count - 1);
-                    Debug.Log($"ELCnt:{ELCnt}");
-                    Debug.Log($"EPosCnt:{EPosCnt}");
-                    }
-                    catch
-                    {
-
-                    }
-                }
-
-                if (EndCnt == 0)
-                {
-                    try
+                    if (EnemyFlag)
                     {
                         Enemy.GetComponent<EnemyData>().PosList = new List<Vector3>(EnemyList);
-                        Debug.Log("Try PosList");
                         Enemy.GetComponent<EnemyData>().SetData();
-                        Debug.Log("SetNum");
                         Enemy.GetComponent<EnemyTimer>().Timer = 0;
                         Enemy.GetComponent<EnemyData>().Return = false;
-                        Debug.Log("Return");
-                    }
-                    catch
-                    {
-
                     }
 
+                    PlayerList[PLCnt].Poslist.Add(Player.transform.position);
                     Player.GetComponent<TimeWarp>().Timelist = new List<TimeList>(PlayerList);
                     Player.GetComponent<PlayerData>().SetData();
                     Player.GetComponent<PlayerData>().Return = false;
@@ -146,31 +126,35 @@ public class Return : MonoBehaviour
             if (!Flag)
             {
                 PPosCnt = PlayerList[PLCnt].Poslist.Count - 1;
-                TargetPos = PlayerList[PLCnt].Poslist[PPosCnt];
+                PlayerTargetPos = PlayerList[PLCnt].Poslist[PPosCnt];
             }
         }
     }
 
     private void EnemyMove()
     {
-        if (EPosCnt > 0 && ELCnt >= 0)
+        if (EnemyFlag)
         {
-            Enemy.transform.position = Vector3.MoveTowards(Enemy.transform.position, EnemyList[ELCnt], 1.0f);
+            Enemy.transform.position = Vector3.MoveTowards(Enemy.transform.position, EnemyTargetPos, 1.0f);
 
-            if (Enemy.transform.position == EnemyList[ELCnt])
+            if (Enemy.transform.position == EnemyTargetPos)
             {
-                Go = true;
-            }
-        }
-        else
-        {
-            Go = true;
-        }
+                EPosCnt--;
+                ELCnt--;
 
-        if (ELCnt < 0)
-        {
-            Player.GetComponent<PlayerData>().SummonFlag();
-            Destroy(Enemy);
+                if (EPosCnt > 0)
+                {
+                    EnemyList.RemoveAt(ELCnt + 1);
+                    EnemyTargetPos = EnemyList[ELCnt];
+                }
+            }
+
+            if (ELCnt < 0 && EnemyEndCnt)
+            {
+                EnemyFlag = false;
+                Player.GetComponent<PlayerData>().SummonFlag();
+                Destroy(Enemy);
+            }
         }
     }
 }

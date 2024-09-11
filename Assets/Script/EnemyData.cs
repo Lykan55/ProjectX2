@@ -18,6 +18,8 @@ public class EnemyData : MonoBehaviour
         Player = GameObject.Find("Human 1");
         EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerPrePos;
         EnemyPrePos = EnemyCurrPos;
+        PosList.Add(EnemyCurrPos);
+        Player.GetComponent<PlayerData>().Movement = false;
     }
 
     private void Update()
@@ -31,14 +33,12 @@ public class EnemyData : MonoBehaviour
                 PosList.Add(Player.GetComponent<PlayerData>().PlayerPrePos);
                 GetComponent<EnemyTimer>().Timer = 0.0f;
                 Player.GetComponent<PlayerData>().Movement = false;
-                Debug.Log($"MMMMMMPosLis;{PosList.Count}");
             }
             else if (GetComponent<EnemyTimer>().Timer >= 5.0f)
             {
                 PosList.Add(Player.GetComponent<PlayerData>().PlayerCurrPos);
                 GetComponent<EnemyTimer>().Timer = 0.0f;
                 Player.GetComponent<TimeWarp>().CntControl();
-                Debug.Log($"TTTTTPosLis;{PosList.Count}");
             }
 
             Move();
@@ -74,11 +74,7 @@ public class EnemyData : MonoBehaviour
     public void SetData()
     {
         ListNum = PosList.Count - 1;
-        Debug.Log($"SetNum ListNum:{ListNum}");
         EnemyCurrPos = PosList[ListNum];
-        Debug.Log("EnemyCurrPos");
         EnemyPrePos = EnemyCurrPos;
-        Debug.Log("EnemyPrePos");
-
     }
 }
