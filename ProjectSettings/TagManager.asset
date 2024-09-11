@@ -7,6 +7,10 @@ TagManager:
   - Floor
   - Enemy
   - wall
+  - Area
+  - Stagebox
+  - StageBoxA
+  - StageBoxB
   layers:
   - Default
   - TransparentFX
@@ -14,8 +18,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - object
+  - Area
   - 
   - 
   - 

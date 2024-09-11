@@ -13,6 +13,8 @@ public class Human1 : MonoBehaviour
     [SerializeField, Header("ジャンプ速度")]
     private float JumpSpeed;
 
+    public GameObject PlayerCollision;// Human1の当たっているオブジェクト
+
     private Vector2 inputDirection;
     private Rigidbody2D rigid;
     private Animator anim;
@@ -61,6 +63,11 @@ public class Human1 : MonoBehaviour
         {
             HandleCollisionWithEnemy(collision);
         }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        PlayerCollision = collision.gameObject;
     }
 
     public void HandleCollisionWithEnemy(Collision2D collision)

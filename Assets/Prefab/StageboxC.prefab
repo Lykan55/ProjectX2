@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5517315590801762718}
   - component: {fileID: 294260394420590231}
   - component: {fileID: 5745429664139818982}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: StageboxC
   m_TagString: Area
   m_Icon: {fileID: 0}
