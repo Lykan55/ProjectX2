@@ -1,12 +1,13 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class TimeWarp : MonoBehaviour
+public class PlayerTimeWarp : MonoBehaviour
 {
     public List<TimeList> Timelist = new List<TimeList>();
     public bool Return = false;
-    private bool Record = true;
 
     private void Start()
     {
@@ -16,12 +17,11 @@ public class TimeWarp : MonoBehaviour
 
     void Update()
     {
-        if (Record && !Return)
+        if (Input.GetKeyDown(KeyCode.Space) && !Return)
         {
-            StartCoroutine("Recorder");
+            Invoke("InputList", 0.3f);
         }
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Area" && !Return)
@@ -30,14 +30,22 @@ public class TimeWarp : MonoBehaviour
             CntControl();
         }
     }
-
-    IEnumerator Recorder()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Record = false;
-        Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
-        yield return new WaitForSeconds(0.5f);
-        Record = true;
+        if (collision.gameObject.tag == "Floor" && !Return)
+        {
+            Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
+        }
     }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Floor" && !Return)
+        {
+            Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
+        }
+    }
+
+
 
     public void CntControl()
     {
@@ -45,9 +53,14 @@ public class TimeWarp : MonoBehaviour
         Timelist.Add(Poslist);
         Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
     }
+    private void InputList()
+    {
+        Timelist[Timelist.Count - 1].Poslist.Add(transform.position);
+    }
+
 }
 
-public class TimeLists
+public class TimeList
 {
     public List<Vector3> Poslist = new List<Vector3>();
 }

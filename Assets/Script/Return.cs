@@ -14,17 +14,17 @@ public class Return : MonoBehaviour
     private List<Vector3> EnemyList;
 
     private int PLCnt;
-    public int ELCnt;
+    private int ELCnt;
     private int PPosCnt;
     private int EPosCnt;
 
     private int PlayerEndCnt;
-    public bool EnemyEndCnt = false;
+    private bool EnemyEndCnt = false;
 
     private Vector3 PlayerTargetPos;
     private Vector3 EnemyTargetPos;
 
-    private bool Flag = false;
+    private bool PlayerFlag = false;
     private bool EnemyFlag = true;
 
     private void Start()
@@ -81,7 +81,7 @@ public class Return : MonoBehaviour
         EnemyMove();
         PlayerMove();
 
-        if (Flag)
+        if (PlayerFlag)
         {
             Destroy(this.gameObject);
         }
@@ -119,11 +119,11 @@ public class Return : MonoBehaviour
                     Player.GetComponent<PlayerData>().Return = false;
                     Player.GetComponent<TimeWarp>().Return = false;
 
-                    Flag = true;
+                    PlayerFlag = true;
                 }
             }
 
-            if (!Flag)
+            if (!PlayerFlag)
             {
                 PPosCnt = PlayerList[PLCnt].Poslist.Count - 1;
                 PlayerTargetPos = PlayerList[PLCnt].Poslist[PPosCnt];
