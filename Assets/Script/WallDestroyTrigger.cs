@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class WallDestroyTrigger : MonoBehaviour
 {
+    public bool destroy = false;
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "wall")

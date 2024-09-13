@@ -20,17 +20,15 @@ public class ItemManager : MonoBehaviour
     public bool isSPressed = false;
     public bool isDPressed = false;
 
-    // 座標+40の位置のオブジェクト親オブジェクトのタグ
+    // 座標+40の位置のオブジェクトのタグ
     public string targetTagPlusX;
     public string targetTagMinusX;
+    public string targetTagMinusY;
 
-    // Areaオブジェクト判定
-    public GameObject AreaPlusX;
-    public GameObject AreaMinusX;
-
-    // Areaオブジェクトのタグを格納
+    // Areaレイヤーのタグを格納
     public string targetAreaTagPlusX;
     public string targetAreaTagMinusX;
+    public string targetAreaTagMinusY;
 
     // objectレイヤー
     public LayerMask Objectlayer;
@@ -203,56 +201,109 @@ public class ItemManager : MonoBehaviour
 
     public void  WallDestroy()// 壁破壊アイテム処理
     {
-        if (isDPressed)
+        FindArea();
+        FindWall();
+        if (isDPressed && targetAreaTagPlusX =="Area" && targetTagPlusX != "wall")
         {
             Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + 20f, player.GetComponent<PlayerData>().PlayerCurrPos.y);
             Instantiate(wallDestroy, pos, Quaternion.identity);
         }
-        else if (isAPressed)
+        else if (isAPressed && targetAreaTagMinusX =="Area" && targetTagMinusX != "wall")
         {
             Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - 20f, player.GetComponent<PlayerData>().PlayerCurrPos.y);
             Instantiate(wallDestroy, pos, Quaternion.identity);
         }
-        ItemCheck = true;
-    }
-
-    /*
-    public void WallDestroy() // 壁破壊アイテム処理
-    {
-        FindObjectPosition();// 周囲のオブジェクトの座標を取得
-
-        //Human1が現在接触しているタグをもとに判定
-        if (player.GetComponent<Human1>().PlayerCollision.gameObject.tag == "wall")// まずは壁に接触してる時だけに限定
+        else if (isSPressed && targetAreaTagMinusY == "Area" && targetTagMinusY != "wall")
         {
-            if (AreaPlusX != null && targetAreaTagPlusX == "Area")
-            {
-                if (targetTagPlusX != "wall" && isDPressed)
-                {
-                    player.GetComponent<Human1>().PlayerCollision.transform.parent.gameObject.SetActive(false);
-                    Debug.Log("右の壁を破壊");
-                }
-            }
-            if (AreaMinusX != null|| targetTagPlusX == null && targetAreaTagMinusX == "Area")
-            {
-                if (targetTagMinusX != "wall" && isAPressed)
-                {
-                    player.GetComponent<Human1>().PlayerCollision.transform.parent.gameObject.SetActive(false);
-                    Debug.Log("左の壁を破壊");
-                }
-            }
-            else 
-            {
-                Debug.Log("ここを破壊することはできません");
-            }
+            Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x, player.GetComponent<PlayerData>().PlayerCurrPos.y - 20f);
+            Instantiate(wallDestroy, pos, Quaternion.identity);
         }
+        else
+        {
+            Debug.Log("ここは破壊できません");
+        }
+        // 一応タグを初期化
+        targetAreaTagPlusX = null;
+        targetAreaTagMinusX = null;
+        targetAreaTagMinusY = null;
+        targetTagPlusX = null;
+        targetTagMinusX = null;
+        targetTagMinusY = null;
+
+        // アイテム再使用許可
         ItemCheck = true;
     }
-    */
-
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
+    public void FindArea()
+    {
+        // ２チャンク先のAreaレイヤーの中心の座標
 
+        // 現在のチャンク位置からx座標を +40 した場所
+        Vector2 targetAreaPositionPlusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からx座標を -40 した場所
+        Vector2 targetAreaPositionMinusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からy座標を -40 した場所
+        Vector2 targetAreaPositionMinusY = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x, player.GetComponent<PlayerData>().PlayerCurrPos.y - searchPosition);
+
+        // Areaレイヤーの２チャンク先にあるオブジェクトを取得
+        Collider2D targetAreaPlusX = Physics2D.OverlapPoint(targetAreaPositionPlusX, Arealayer);    // Xが +40
+        Collider2D targetAreaMinusX = Physics2D.OverlapPoint(targetAreaPositionMinusX, Arealayer);  // Xが -40
+        Collider2D targetAreaMinusY = Physics2D.OverlapPoint(targetAreaPositionMinusY, Arealayer);  // Xが -40
+
+
+        // ２チャンク先のAreaレイヤーのタグを取得
+        if (targetAreaPlusX != null)
+        {
+            targetAreaTagPlusX = targetAreaPlusX.gameObject.tag;
+        }
+        if (targetAreaMinusX != null)
+        {
+            targetAreaTagMinusX = targetAreaMinusX.gameObject.tag;
+        }
+        if (targetAreaMinusY != null)
+        {
+            targetAreaTagMinusY = targetAreaMinusY.gameObject.tag;
+        }
+    }
+
+    public void FindWall()
+    {
+        // 現在のチャンク位置からx座標を +40 した場所
+        Vector2 targetPositionPlusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からx座標を -40 した場所
+        Vector2 targetPositionMinusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からy座標を -40 した場所
+        Vector2 targetPositionMinusY = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x, player.GetComponent<PlayerData>().PlayerCurrPos.y - searchPosition);
+
+
+        // Objectレイヤーの２チャンク先にあるオブジェクトを取得
+        Collider2D targetObjectPlusX = Physics2D.OverlapPoint(targetPositionPlusX, Objectlayer);    // Xが +40
+        Collider2D targetObjectMinusX = Physics2D.OverlapPoint(targetPositionMinusX, Objectlayer);  // Xが -40
+        Collider2D targetObjectMinusY = Physics2D.OverlapPoint(targetPositionMinusY, Objectlayer);  // Xが -40
+
+
+        if (targetObjectPlusX != null)
+        {
+            targetTagPlusX = targetObjectPlusX.gameObject.tag;
+        }
+        if(targetObjectMinusX != null)
+        {
+            targetTagMinusX = targetObjectMinusX.gameObject.tag;
+        }
+        if (targetObjectMinusY != null)
+        {
+            targetTagMinusY = targetObjectMinusY.gameObject.tag;
+        }
+    }
+
+
+    /*
     // ２チャンク先にあるオブジェクトのタグを取得するメソッド
     public void FindObjectPosition()
     {
@@ -312,4 +363,5 @@ public class ItemManager : MonoBehaviour
             targetTagMinusX = targetObjectMinusX.gameObject.tag;
         }
     }
+    */
 }
