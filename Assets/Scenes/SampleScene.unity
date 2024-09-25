@@ -725,6 +725,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 10
   JumpSpeed: 45
+  PlayerCollision: {fileID: 0}
   jumpForce: 10
 --- !u!114 &501945776
 MonoBehaviour:
@@ -1259,8 +1260,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0315678231b3e5440aef6b649f6e9829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 5
-  height: 5
+  width: 15
+  height: 15
   stageblockA: {fileID: 9089591882278033723, guid: b9a215c0e6d793b44b7cf03d2fac54c1, type: 3}
   stageblockB: {fileID: 804330066037301581, guid: d47ba8addfac14a4881f4016b181bc4f, type: 3}
   stageblockC: {fileID: 6074760717865509908, guid: eb39fd95b439c7f41a328f23bba4fe6e, type: 3}
@@ -1371,14 +1372,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f520986c9c8668b47b452be0ac53364b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 501945767}
+  wallDestroy: {fileID: 3020431721527018169, guid: 458027ebf6f1b544f8fbb945444f29e4, type: 3}
+  searchPosition: 40
+  isWPressed: 0
+  isAPressed: 0
+  isSPressed: 0
+  isDPressed: 0
+  targetTagPlusX: 
+  targetTagMinusX: 
+  AreaPlusX: {fileID: 0}
+  AreaMinusX: {fileID: 0}
+  targetAreaTagPlusX: 
+  targetAreaTagMinusX: 
+  Objectlayer:
+    serializedVersion: 2
+    m_Bits: 64
+  Arealayer:
+    serializedVersion: 2
+    m_Bits: 128
   ItemCheck: 1
   virtualCamera: {fileID: 555479384}
   newOrthoSize: 50
   goalDirectionItem: {fileID: 703440355}
   itemImages:
   - {fileID: 21300000, guid: 4b2a6a624bc598f49bac40f0cbcb6378, type: 3}
-  - {fileID: 21300000, guid: 08b10c3ed212b814e92f8928bc8981ec, type: 3}
   - {fileID: 21300000, guid: b54399b370ae967488d75c3527f078b7, type: 3}
+  - {fileID: 21300000, guid: 08b10c3ed212b814e92f8928bc8981ec, type: 3}
   itemSlots:
   - {fileID: 4095745}
   - {fileID: 102793725}
