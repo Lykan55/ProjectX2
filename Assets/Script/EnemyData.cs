@@ -9,33 +9,41 @@ public class EnemyData : MonoBehaviour
     public Vector3 EnemyPrePos = new Vector2();
     GameObject Player;
     private float StartTime;
-    private List<Vector3> PosList = new List<Vector3>();
+    public List<Vector3> PosList = new List<Vector3>();
     private int ListNum = 0;
+    public bool Return = false;
 
     private void Start()
     {
         Player = GameObject.Find("Human 1");
         EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerPrePos;
         EnemyPrePos = EnemyCurrPos;
+        PosList.Add(EnemyCurrPos);
+        Player.GetComponent<PlayerData>().Movement = false;
     }
 
     private void Update()
     {
-        Directions();
-
-        if (Player.GetComponent<PlayerData>().Movement == true)
+        if (!Return)
         {
-            PosList.Add(Player.GetComponent<PlayerData>().PlayerPrePos);
-            GetComponent<EnemyTimer>().Timer = 0.0f;
-            Player.GetComponent<PlayerData>().Movement = false;
-        }
-        else if (GetComponent<EnemyTimer>().Timer >= 5.0f)
-        {
-            PosList.Add(Player.GetComponent<PlayerData>().PlayerCurrPos);
-            GetComponent<EnemyTimer>().Timer = 0.0f;
+            Directions();
+
+            if (Player.GetComponent<PlayerData>().Movement == true)
+            {
+                PosList.Add(Player.GetComponent<PlayerData>().PlayerPrePos);
+                GetComponent<EnemyTimer>().Timer = 0.0f;
+                Player.GetComponent<PlayerData>().Movement = false;
+            }
+            else if (GetComponent<EnemyTimer>().Timer >= 5.0f)
+            {
+                PosList.Add(Player.GetComponent<PlayerData>().PlayerCurrPos);
+                GetComponent<EnemyTimer>().Timer = 0.0f;
+                Player.GetComponent<TimeWarp>().CntControl();
+            }
+
+            Move();
         }
 
-        Move();
     }
 
     private void Directions()
@@ -61,5 +69,12 @@ public class EnemyData : MonoBehaviour
             EnemyCurrPos = PosList[ListNum];
             StartTime = Time.timeSinceLevelLoad;
         }
+    }
+
+    public void SetData()
+    {
+        ListNum = PosList.Count - 1;
+        EnemyCurrPos = PosList[ListNum];
+        EnemyPrePos = EnemyCurrPos;
     }
 }
