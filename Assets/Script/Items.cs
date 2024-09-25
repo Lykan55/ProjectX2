@@ -12,6 +12,8 @@ public class ItemManager : MonoBehaviour
 
     public GameObject wallDestroy;
 
+    public GameObject Return;
+
     public float searchPosition = 40f;  // n方向のチャンクの検索数値
 
     // アイテム使用時の方向を判定 ＋ 疑似的にリアルタイムで監視
@@ -155,6 +157,11 @@ public class ItemManager : MonoBehaviour
                 else if (itemName == "WallDestroy")
                 {
                     WallDestroy();
+                }
+                else if(itemName == "Return")
+                {
+                    Vector2 pos = new Vector2(0,0);
+                    Instantiate(Return, pos, Quaternion.identity);
                 }
             }
             else

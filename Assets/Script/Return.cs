@@ -83,6 +83,7 @@ public class Return : MonoBehaviour
 
         if (PlayerFlag)
         {
+            GameObject.Find("Panel").GetComponent<ItemManager>().ItemCheck = true;
             Destroy(this.gameObject);
         }
     }
