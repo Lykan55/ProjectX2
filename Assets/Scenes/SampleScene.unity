@@ -1389,6 +1389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 501945767}
   wallDestroy: {fileID: 3020431721527018169, guid: 458027ebf6f1b544f8fbb945444f29e4, type: 3}
+  Return: {fileID: 8112243089915045547, guid: 3d759046424a2a14e9c614af199d06da, type: 3}
   searchPosition: 40
   isWPressed: 0
   isAPressed: 0
@@ -1396,10 +1397,10 @@ MonoBehaviour:
   isDPressed: 0
   targetTagPlusX: 
   targetTagMinusX: 
-  AreaPlusX: {fileID: 0}
-  AreaMinusX: {fileID: 0}
+  targetTagMinusY: 
   targetAreaTagPlusX: 
   targetAreaTagMinusX: 
+  targetAreaTagMinusY: 
   Objectlayer:
     serializedVersion: 2
     m_Bits: 64
