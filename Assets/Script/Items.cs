@@ -3,9 +3,38 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class ItemManager : MonoBehaviour
 {
+    // Human1を取得
+    public GameObject player;
+
+    public GameObject wallDestroy;
+
+    public float searchPosition = 40f;  // n方向のチャンクの検索数値
+
+    // アイテム使用時の方向を判定 ＋ 疑似的にリアルタイムで監視
+    public bool isWPressed = false;
+    public bool isAPressed = false;
+    public bool isSPressed = false;
+    public bool isDPressed = false;
+
+    // 座標+40の位置のオブジェクトのタグ
+    public string targetTagPlusX;
+    public string targetTagMinusX;
+    public string targetTagMinusY;
+
+    // Areaレイヤーのタグを格納
+    public string targetAreaTagPlusX;
+    public string targetAreaTagMinusX;
+    public string targetAreaTagMinusY;
+
+    // objectレイヤー
+    public LayerMask Objectlayer;
+    // Areaレイヤー
+    public LayerMask Arealayer;
+
     // アイテムの複数使用制限用
     public bool ItemCheck = false;
 
@@ -36,22 +65,35 @@ public class ItemManager : MonoBehaviour
 
     void Update()
     {
-        // 1キー、2キー、3キーが押されたときにアイテムを使用する
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        // Jキー、Kキー、Lキーが押されたときにアイテムを使用する
+        if (Input.GetKeyDown(KeyCode.J))
         {
             UseItem(0); // 1キーが押された場合
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.K))
         {
             UseItem(1); // 2キーが押された場合
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.L))
         {
             UseItem(2); // 3キーが押された場合
         }
+
+        // キーが押されたらtrueに設定
+        if (Input.GetKeyDown(KeyCode.W)) { isWPressed = true; }
+        if (Input.GetKeyDown(KeyCode.A)) { isAPressed = true; }
+        if (Input.GetKeyDown(KeyCode.S)) { isSPressed = true; }
+        if (Input.GetKeyDown(KeyCode.D)) { isDPressed = true; }
+
+        // キーが離されたらfalseに戻す
+        if (Input.GetKeyUp(KeyCode.W)) { isWPressed = false; }
+        if (Input.GetKeyUp(KeyCode.A)) { isAPressed = false; }
+        if (Input.GetKeyUp(KeyCode.S)) { isSPressed = false; }
+        if (Input.GetKeyUp(KeyCode.D)) { isDPressed = false; }
+
     }
 
-    
+
 
     void SelectItems()
     {
@@ -98,7 +140,7 @@ public class ItemManager : MonoBehaviour
             {
                 Sprite item = selectedItems[slotIndex];
                 string itemName = item.name; // アイテムの名前を取得
-                Debug.Log($"Using item in slot {slotIndex}: {itemName}"); // 使用したアイテムをデバッグログに表示
+                Debug.Log($"{slotIndex}: {itemName}を使用"); // 使用したアイテムをデバッグログに表示
 
                 // アイテムのメソッドをここに追加
 
@@ -109,6 +151,10 @@ public class ItemManager : MonoBehaviour
                 else if (itemName == "ArrowItem")
                 {
                     StartCoroutine(Arrow());
+                }
+                else if (itemName == "WallDestroy")
+                {
+                    WallDestroy();
                 }
             }
             else
@@ -122,10 +168,10 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    
+
 
     //アイテムの処理
-    public IEnumerator Lens()
+    public IEnumerator Lens()// 視野角アイテム処理
     {
         if (virtualCamera != null)
         {
@@ -143,7 +189,7 @@ public class ItemManager : MonoBehaviour
 
 
 
-    public IEnumerator Arrow()//矢印アイテム処理
+    public IEnumerator Arrow()// 矢印アイテム処理
     {
         // GoalDirectionItemスクリプトを参照
         goalDirectionItem.UseGoalDirectionItem(); // ゴールの方向を表示するメソッドを呼び出す
@@ -151,4 +197,171 @@ public class ItemManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         ItemCheck = true;
     }
+
+
+    public void  WallDestroy()// 壁破壊アイテム処理
+    {
+        FindArea();
+        FindWall();
+        if (isDPressed && targetAreaTagPlusX =="Area" && targetTagPlusX != "wall")
+        {
+            Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + 20f, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+            Instantiate(wallDestroy, pos, Quaternion.identity);
+        }
+        else if (isAPressed && targetAreaTagMinusX =="Area" && targetTagMinusX != "wall")
+        {
+            Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - 20f, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+            Instantiate(wallDestroy, pos, Quaternion.identity);
+        }
+        else if (isSPressed && targetAreaTagMinusY == "Area" && targetTagMinusY != "wall")
+        {
+            Vector2 pos = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x, player.GetComponent<PlayerData>().PlayerCurrPos.y - 20f);
+            Instantiate(wallDestroy, pos, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log("ここは破壊できません");
+        }
+        // 一応タグを初期化
+        targetAreaTagPlusX = null;
+        targetAreaTagMinusX = null;
+        targetAreaTagMinusY = null;
+        targetTagPlusX = null;
+        targetTagMinusX = null;
+        targetTagMinusY = null;
+
+        // アイテム再使用許可
+        ItemCheck = true;
+    }
+
+    /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+    public void FindArea()
+    {
+        // ２チャンク先のAreaレイヤーの中心の座標
+
+        // 現在のチャンク位置からx座標を +40 した場所
+        Vector2 targetAreaPositionPlusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からx座標を -40 した場所
+        Vector2 targetAreaPositionMinusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からy座標を -40 した場所
+        Vector2 targetAreaPositionMinusY = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x, player.GetComponent<PlayerData>().PlayerCurrPos.y - searchPosition);
+
+        // Areaレイヤーの２チャンク先にあるオブジェクトを取得
+        Collider2D targetAreaPlusX = Physics2D.OverlapPoint(targetAreaPositionPlusX, Arealayer);    // Xが +40
+        Collider2D targetAreaMinusX = Physics2D.OverlapPoint(targetAreaPositionMinusX, Arealayer);  // Xが -40
+        Collider2D targetAreaMinusY = Physics2D.OverlapPoint(targetAreaPositionMinusY, Arealayer);  // Xが -40
+
+
+        // ２チャンク先のAreaレイヤーのタグを取得
+        if (targetAreaPlusX != null)
+        {
+            targetAreaTagPlusX = targetAreaPlusX.gameObject.tag;
+        }
+        if (targetAreaMinusX != null)
+        {
+            targetAreaTagMinusX = targetAreaMinusX.gameObject.tag;
+        }
+        if (targetAreaMinusY != null)
+        {
+            targetAreaTagMinusY = targetAreaMinusY.gameObject.tag;
+        }
+    }
+
+    public void FindWall()
+    {
+        // 現在のチャンク位置からx座標を +40 した場所
+        Vector2 targetPositionPlusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からx座標を -40 した場所
+        Vector2 targetPositionMinusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からy座標を -40 した場所
+        Vector2 targetPositionMinusY = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x, player.GetComponent<PlayerData>().PlayerCurrPos.y - searchPosition);
+
+
+        // Objectレイヤーの２チャンク先にあるオブジェクトを取得
+        Collider2D targetObjectPlusX = Physics2D.OverlapPoint(targetPositionPlusX, Objectlayer);    // Xが +40
+        Collider2D targetObjectMinusX = Physics2D.OverlapPoint(targetPositionMinusX, Objectlayer);  // Xが -40
+        Collider2D targetObjectMinusY = Physics2D.OverlapPoint(targetPositionMinusY, Objectlayer);  // Xが -40
+
+
+        if (targetObjectPlusX != null)
+        {
+            targetTagPlusX = targetObjectPlusX.gameObject.tag;
+        }
+        if(targetObjectMinusX != null)
+        {
+            targetTagMinusX = targetObjectMinusX.gameObject.tag;
+        }
+        if (targetObjectMinusY != null)
+        {
+            targetTagMinusY = targetObjectMinusY.gameObject.tag;
+        }
+    }
+
+
+    /*
+    // ２チャンク先にあるオブジェクトのタグを取得するメソッド
+    public void FindObjectPosition()
+    {
+        // 現在のチャンク位置からx座標を +40 した場所
+        Vector2 targetPositionPlusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y + 9.5f);
+
+        // 現在のチャンク位置からx座標を -40 した場所
+        Vector2 targetPositionMinusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y + 9.5f);
+
+// ２チャンク先のAreaレイヤーの中心の座標
+
+        // 現在のチャンク位置からx座標を +40 した場所
+        Vector2 targetAreaPositionPlusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x + searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+        // 現在のチャンク位置からx座標を -40 した場所
+        Vector2 targetAreaPositionMinusX = new Vector2(player.GetComponent<PlayerData>().PlayerCurrPos.x - searchPosition, player.GetComponent<PlayerData>().PlayerCurrPos.y);
+
+// OverlapPointを使って、２チャンク先にあるオブジェクトを取得
+
+        // Objectレイヤーの２チャンク先にあるオブジェクトを取得
+        Collider2D targetObjectPlusX = Physics2D.OverlapPoint(targetPositionPlusX, Objectlayer);    // Xが +40
+        Collider2D targetObjectMinusX = Physics2D.OverlapPoint(targetPositionMinusX, Objectlayer);  // Xが -40
+
+        // Areaレイヤーの２チャンク先にあるオブジェクトを取得
+        Collider2D targetAreaPlusX = Physics2D.OverlapPoint(targetAreaPositionPlusX, Arealayer);    // Xが +40
+        Collider2D targetAreaMinusX = Physics2D.OverlapPoint(targetAreaPositionMinusX, Arealayer);  // Xが -40
+
+// ２チャンク先のAreaレイヤーのオブジェクト
+        if (targetAreaPlusX != null && isDPressed)
+        {
+            AreaPlusX = targetAreaPlusX.gameObject;
+        }
+        else if (targetAreaMinusX != null && isAPressed)
+        {
+            AreaMinusX = targetAreaMinusX.gameObject;
+        }
+        
+
+// ２チャンク先のAreaレイヤーのタグを取得
+        if (targetAreaPlusX != null && isDPressed)
+        {
+            targetAreaTagPlusX = targetAreaPlusX.gameObject.tag;
+        }
+        else if (targetAreaMinusX != null && isAPressed)
+        {
+            targetAreaTagMinusX = targetAreaMinusX.gameObject.tag;
+        }
+
+// ２チャンク先のobjectレイヤーの上のタグを取得
+        if (targetObjectPlusX != null && targetObjectPlusX.transform.parent != null && isDPressed)
+        {
+            targetTagPlusX = targetObjectPlusX.gameObject.tag;
+        }
+
+        else if (targetObjectMinusX != null && targetObjectMinusX.transform.parent != null && isAPressed)
+        {
+            targetTagMinusX = targetObjectMinusX.gameObject.tag;
+        }
+    }
+    */
 }

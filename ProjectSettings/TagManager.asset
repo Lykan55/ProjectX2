@@ -7,15 +7,19 @@ TagManager:
   - Floor
   - Enemy
   - wall
+  - Area
+  - Stagebox
+  - StageBoxA
+  - StageBoxB
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - destroyTrigger
   - Water
   - UI
-  - 
-  - 
+  - object
+  - Area
   - 
   - 
   - 

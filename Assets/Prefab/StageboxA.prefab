@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3329919623135251846}
   - component: {fileID: 7358309039259603963}
   - component: {fileID: 5491354564441717148}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: A-1
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 1382449596835803445}
   - component: {fileID: 9077752203850475383}
   - component: {fileID: 7337937778968448030}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: A-2
   m_TagString: wall
   m_Icon: {fileID: 0}
@@ -269,9 +269,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1910448546828181422}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: StageboxA
-  m_TagString: Untagged
+  m_TagString: StageBoxA
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
