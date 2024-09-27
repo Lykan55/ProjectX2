@@ -16,11 +16,14 @@ public class stage : MonoBehaviour
     static bool end = false;
     static int[] start = new int[2];
     static int[] goaldata = { 0, 0, 0 };
+    static bool flag = false;
 
     public int width;
     public int height;
     static int inputx;
     static int inputy;
+
+    public GameObject Enemy;
 
     public GameObject stageblockA;
     public GameObject stageblockB;
@@ -53,6 +56,13 @@ public class stage : MonoBehaviour
                     goaldata[0] = x;
                     goaldata[1] = y;
                     goaldata[2] = rist.Length;
+                    if (!flag)
+                    {
+                        Vector2 pos = new Vector2((inputx - 1 - goaldata[0]) * 20, (inputy - 1 - goaldata[1]) * 20);
+                        GameObject enemy = Instantiate(Enemy, pos, Quaternion.identity);
+                        enemy.transform.parent = transform;
+                        flag = true;
+                    }
                 }
                 nothing();
             }
@@ -288,5 +298,20 @@ public class stage : MonoBehaviour
 
         Array.Resize(ref rist, 0);
         Array.Resize(ref rist, 1);
+    }
+
+    public int[,] ReturnMap()
+    {
+        int[,] Map = new int[inputx - 1, inputy - 1];
+
+        for (int x = 0; x < inputx; x++)
+        {
+            for (int y = 0; y < inputy; y++)
+            {
+                Map[inputx - 1 - x, inputy - 1 - y] = Stage[x, y];
+            }
+        }
+
+        return Map;
     }
 }
