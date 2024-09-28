@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3683677305814249025}
   - component: {fileID: 321744848197157449}
   m_Layer: 0
-  m_Name: "\u30B8\u30A7\u30E0"
+  m_Name: Gem
   m_TagString: gem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4267869110362028301}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -36.8, y: -49.3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
   m_ConstrainProportionsScale: 1
   m_Children: []

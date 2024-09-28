@@ -24,7 +24,11 @@ public class stage : MonoBehaviour
     static int inputx;
     static int inputy;
 
+    public int GemNumber = 0;
+
     public GameObject Enemy;
+
+    public GameObject Gem;
 
     public GameObject stageblockA;
     public GameObject stageblockB;
@@ -101,6 +105,10 @@ public class stage : MonoBehaviour
                 else if (Stage[x, y] == 1)
                 {
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
+                    GameObject gem = Instantiate(Gem, pos, Quaternion.identity);
+                    gem.transform.parent = transform;
+                    GemNumber++;
+
                     GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
                     boxC.transform.parent = transform;
                 }
@@ -109,6 +117,10 @@ public class stage : MonoBehaviour
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
                     GameObject boxB = Instantiate(stageblockB, pos, Quaternion.identity);
                     boxB.transform.parent = transform;
+
+                    GameObject gem = Instantiate(Gem, pos, Quaternion.identity);
+                    gem.transform.parent = transform;
+                    GemNumber++;
 
                     GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
                     boxC.transform.parent = transform;
