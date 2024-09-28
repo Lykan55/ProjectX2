@@ -7,7 +7,7 @@ public class Menu : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("UpgradeScene");
     }
 
     public void EndGame()

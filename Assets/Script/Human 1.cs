@@ -63,6 +63,11 @@ public class Human1 : MonoBehaviour
         {
             HandleCollisionWithEnemy(collision);
         }
+
+        if (collision.gameObject.tag == "gem")
+        {
+            Destroy(collision.gameObject);
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
