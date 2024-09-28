@@ -16,6 +16,7 @@ public class stage : MonoBehaviour
     static bool end = false;
     static int[] start = new int[2];
     static int[] goaldata = { 0, 0, 0 };
+    static int[] enemysummon = { 0, 0, 0 };
     static bool flag = false;
 
     public int width;
@@ -58,9 +59,7 @@ public class stage : MonoBehaviour
                     goaldata[2] = rist.Length;
                     if (!flag)
                     {
-                        Vector2 pos = new Vector2((inputx - 1 - goaldata[0]) * 20, (inputy - 1 - goaldata[1]) * 20);
-                        GameObject enemy = Instantiate(Enemy, pos, Quaternion.identity);
-                        enemy.transform.parent = transform;
+                        Stage[x, y] = 3;
                         flag = true;
                     }
                 }
@@ -110,6 +109,15 @@ public class stage : MonoBehaviour
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
                     GameObject boxB = Instantiate(stageblockB, pos, Quaternion.identity);
                     boxB.transform.parent = transform;
+
+                    GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
+                    boxC.transform.parent = transform;
+                }
+                else if (Stage[x, y] == 3)
+                {
+                    Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
+                    GameObject enemy = Instantiate(Enemy, pos, Quaternion.identity);
+                    enemy.transform.parent = transform;
 
                     GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
                     boxC.transform.parent = transform;

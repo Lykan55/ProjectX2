@@ -6,10 +6,10 @@ using UnityEngine.UIElements;
 public class EnemyMove : MonoBehaviour
 {
     GameObject Player;
-    public GameObject Search;
 
     Vector3 TargetPos;
-    private int Front;
+    int[,] Map;
+    int[] MapPos;
 
     public List<Vector3> PosList = new List<Vector3>();
     public bool Return = false;
@@ -17,27 +17,66 @@ public class EnemyMove : MonoBehaviour
     void Start()
     {
         Player = GameObject.Find("Human 1");
-        SetData();
+        Map = GameObject.Find("StageMaker").GetComponent<stage>().ReturnMap();
+        MapPos = MapPosSearch();
         PosList.Add(transform.position);
     }
 
     void Update()
     {
-        if (TargetPos == transform.position)
-        {
-            SetData();
-        }
+
 
         transform.position = Vector3.MoveTowards(transform.position, TargetPos, 0.1f);
     }
 
-    void SetData()
+    void TargetPosSearch()
     {
-        GameObject Searcher = Instantiate(Search, transform.position, Quaternion.identity);
-        Front = Searcher.GetComponent<EnemySearch>().FrontSearch();
-        TargetPos = Searcher.GetComponent<EnemySearch>().TargetSearch(Front);
-        Debug.Log($"{Front}");
-        Debug.Log($"{TargetPos}");
-        Destroy(Searcher);
+
+    }
+    void FrontSearch()
+    {
+        int[] Data = { 1, 1, 1, 1 };
+
+        if (Map[MapPos[0], MapPos[1] + 1] == 0)
+        {
+            Data[0] = 0;
+        }
+        if (Map[MapPos[0] + 1, MapPos[1]] == 0)
+        {
+            Data[1] = 0;
+        }
+        if (Map[MapPos[0], MapPos[1] - 1] == 0)
+        {
+            Data[2] = 0;
+        }
+        if (Map[MapPos[0] - 1, MapPos[1]] == 0)
+        {
+            Data[3] = 0;
+        }
+
+        while (true)
+        {
+
+        }
+    }
+
+    int[] MapPosSearch()
+    {
+        int[] ans = { 0, 0 };
+
+        for (int x = 0; x < Map.GetLength(0); x++)
+        {
+            for (int y = 0; y < Map.GetLength(1); y++)
+            {
+                if (Map[x, y] == 3)
+                {
+                    ans[0] = x;
+                    ans[1] = y;
+                    return ans;
+                }
+            }
+        }
+
+        return ans;
     }
 }
