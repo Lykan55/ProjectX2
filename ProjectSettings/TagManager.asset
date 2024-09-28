@@ -11,6 +11,7 @@ TagManager:
   - Stagebox
   - StageBoxA
   - StageBoxB
+  - gem
   layers:
   - Default
   - TransparentFX
