@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -296568391085433864}
   - component: {fileID: -4614130274092427952}
   - component: {fileID: 8052048125064367012}
+  - component: {fileID: 6563321022411959811}
   m_Layer: 0
   m_Name: enemy 0
   m_TagString: Enemy
@@ -151,13 +152,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8114399302398817437}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbb38d0e2db888e429ab336aaf29040b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyCurrPos: {x: 0, y: 0, z: 0}
   EnemyPrePos: {x: 0, y: 0, z: 0}
+  PosList: []
   Return: 0
 --- !u!114 &8052048125064367012
 MonoBehaviour:
@@ -172,3 +174,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Timer: 0
+--- !u!114 &6563321022411959811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8114399302398817437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ece9f0f4bed67945814b10405f177cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Search: {fileID: 0}
+  PosList: []
+  Return: 0

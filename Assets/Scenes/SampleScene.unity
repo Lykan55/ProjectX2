@@ -1277,6 +1277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 15
   height: 15
+  Enemy: {fileID: 8114399302398817437, guid: 00172349d8aeaba4abd8949dbc9bb9db, type: 3}
   stageblockA: {fileID: 9089591882278033723, guid: b9a215c0e6d793b44b7cf03d2fac54c1, type: 3}
   stageblockB: {fileID: 804330066037301581, guid: d47ba8addfac14a4881f4016b181bc4f, type: 3}
   stageblockC: {fileID: 6074760717865509908, guid: eb39fd95b439c7f41a328f23bba4fe6e, type: 3}

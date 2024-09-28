@@ -10,8 +10,6 @@ public class PlayerData : MonoBehaviour
     public Vector3 PlayerPrePos = new Vector2();
     public bool Movement = false;
     public bool Return = false;
-    private bool Summon1 = false;
-    private bool Summon2 = true;
     private Collider2D ReturnPos;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -21,14 +19,6 @@ public class PlayerData : MonoBehaviour
         if (collision.tag == "Area" && !Return)
         {
             PlayerPrePos = PlayerCurrPos;
-
-            if (Summon1 && Summon2)
-            {
-                Invoke(nameof(Summon), 0.8f);
-                Summon2 = false;
-            }
-
-            Summon1 = true;
 
             PlayerCurrPos = collision.transform.position;
 
@@ -46,11 +36,5 @@ public class PlayerData : MonoBehaviour
     {
         PlayerCurrPos = ReturnPos.transform.position;
         PlayerPrePos = PlayerCurrPos;
-    }
-
-    public void SummonFlag()
-    {
-        Summon1 = true;
-        Summon2 = true;
     }
 }

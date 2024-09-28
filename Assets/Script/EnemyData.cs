@@ -16,7 +16,7 @@ public class EnemyData : MonoBehaviour
     private void Start()
     {
         Player = GameObject.Find("Human 1");
-        EnemyCurrPos = Player.GetComponent<PlayerData>().PlayerPrePos;
+        EnemyCurrPos = GetComponent<Transform>().position;
         EnemyPrePos = EnemyCurrPos;
         PosList.Add(EnemyCurrPos);
         Player.GetComponent<PlayerData>().Movement = false;

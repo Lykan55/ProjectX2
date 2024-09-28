@@ -153,8 +153,6 @@ public class Return : MonoBehaviour
             if (ELCnt < 0 && EnemyEndCnt)
             {
                 EnemyFlag = false;
-                Player.GetComponent<PlayerData>().SummonFlag();
-                Destroy(Enemy);
             }
         }
     }
