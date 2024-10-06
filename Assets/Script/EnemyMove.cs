@@ -6,10 +6,9 @@ using UnityEngine.UIElements;
 public class EnemyMove : MonoBehaviour
 {
     GameObject Player;
-
     Vector3 TargetPos;
     int[,] Map;
-    int[] TargetMapPos;
+    public int[] TargetMapPos = new int[2];
     public int Front = 0;
 
     void Start()
@@ -23,6 +22,7 @@ public class EnemyMove : MonoBehaviour
 
     void Update()
     {
+        PlayerPosSearch();
         transform.position = Vector3.MoveTowards(transform.position, TargetPos, 0.1f);
 
         if (TargetPos == transform.position)
@@ -95,7 +95,6 @@ public class EnemyMove : MonoBehaviour
     {
         int[] Data = AreaSearch();
         int DataFront = 0;
-        Debug.Log($"{Data[4]}");
         if (Data[4] > 1)
         {
             Front += 2;
@@ -166,5 +165,57 @@ public class EnemyMove : MonoBehaviour
         }
 
         return ans;
+    }
+
+    void PlayerPosSearch()
+    {
+        Vector3 PlayerPos = Player.transform.position;
+        float PosX = transform.position.x - PlayerPos.x;
+        float PosY = transform.position.y - PlayerPos.y;
+
+        switch (Front)
+        {
+            case 0:
+                if (-30 <= PosY && PosY <= 0 && Mathf.Abs(PosX) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+            case 1:
+                if (-30 <= PosX && PosX <= 0 && Mathf.Abs(PosY) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+            case 2:
+                if (0 <= PosY && PosY <= 30 && Mathf.Abs(PosX) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+            case 3:
+                if (0 <= PosX && PosX <= 30 && Mathf.Abs(PosY) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+        }
+    }
+    void MapPosLoad(Vector3 PlayerPos)
+    {
+        TargetMapPos[0] = (int)PlayerPos.x / 20;
+        if (PlayerPos.x % 20 > 10)
+        {
+            TargetMapPos[0]++;
+        }
+
+        TargetMapPos[1] = (int)PlayerPos.y / 20;
+        if (PlayerPos.y % 20 > 10)
+        {
+            TargetMapPos[1]++;
+        }
+
+        TargetPos.x = TargetMapPos[0] * 20;
+        TargetPos.y = TargetMapPos[1] * 20;
     }
 }
