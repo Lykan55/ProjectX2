@@ -6,61 +6,148 @@ using UnityEngine.UIElements;
 public class EnemyMove : MonoBehaviour
 {
     GameObject Player;
-
     Vector3 TargetPos;
     int[,] Map;
-    int[] MapPos;
-
-    public List<Vector3> PosList = new List<Vector3>();
-    public bool Return = false;
+    public int[] TargetMapPos = new int[2];
+    public int Front = 0;
 
     void Start()
     {
         Player = GameObject.Find("Human 1");
         Map = GameObject.Find("StageMaker").GetComponent<stage>().ReturnMap();
-        MapPos = MapPosSearch();
-        PosList.Add(transform.position);
+        TargetMapPos = FirstPosSearch();
+        TargetPos.x = TargetMapPos[0] * 20;
+        TargetPos.y = TargetMapPos[1] * 20;
     }
 
     void Update()
     {
-
-
+        PlayerPosSearch();
         transform.position = Vector3.MoveTowards(transform.position, TargetPos, 0.1f);
+
+        if (TargetPos == transform.position)
+        {
+            Front = FrontSearch();
+            TargetPosSearch();
+            TargetPos.x = TargetMapPos[0] * 20;
+            TargetPos.y = TargetMapPos[1] * 20;
+        }
     }
 
     void TargetPosSearch()
     {
+        bool Flag = true;
 
+        while (AreaSearch()[Front] == 1 && Flag)
+        {
+            switch (Front)
+            {
+                case 0:
+                    TargetMapPos[1]++;
+                    break;
+                case 1:
+                    TargetMapPos[0]++;
+                    break;
+                case 2:
+                    TargetMapPos[1]--;
+                    break;
+                case 3:
+                    TargetMapPos[0]--;
+                    break;
+            }
+
+            if (SideSearch())
+            {
+                Flag = false;
+            }
+        }
+
+        Flag = true;
     }
-    void FrontSearch()
+    int[] AreaSearch()
     {
-        int[] Data = { 1, 1, 1, 1 };
+        int[] Data = { 1, 1, 1, 1, 4 };
 
-        if (Map[MapPos[0], MapPos[1] + 1] == 0)
+        if (Map[TargetMapPos[0], TargetMapPos[1] + 1] == 0)
         {
             Data[0] = 0;
+            Data[4]--;
         }
-        if (Map[MapPos[0] + 1, MapPos[1]] == 0)
+        if (Map[TargetMapPos[0] + 1, TargetMapPos[1]] == 0)
         {
             Data[1] = 0;
+            Data[4]--;
         }
-        if (Map[MapPos[0], MapPos[1] - 1] == 0)
+        if (Map[TargetMapPos[0], TargetMapPos[1] - 1] == 0)
         {
             Data[2] = 0;
+            Data[4]--;
         }
-        if (Map[MapPos[0] - 1, MapPos[1]] == 0)
+        if (Map[TargetMapPos[0] - 1, TargetMapPos[1]] == 0)
         {
             Data[3] = 0;
+            Data[4]--;
         }
 
-        while (true)
+        return Data;
+    }
+    int FrontSearch()
+    {
+        int[] Data = AreaSearch();
+        int DataFront = 0;
+        if (Data[4] > 1)
         {
+            Front += 2;
+            if (Front > 3)
+            {
+                Front -= 4;
+            }
 
+            do
+            {
+                DataFront = Random.Range(0, 4);
+            }
+            while (Data[DataFront] == 0 || DataFront == Front);
         }
+        else
+        {
+            while (Data[DataFront] == 0)
+            {
+                DataFront++;
+            }
+        }
+
+        return DataFront;
+    }
+    bool SideSearch()
+    {
+        int[] Data = AreaSearch();
+        int[] Side = { 0, 0 };
+
+        Side[0] = Front - 1;
+        Side[1] = Front + 1;
+
+        for (int n = 0; n < 2; n++)
+        {
+            if (Side[n] < 0)
+            {
+                Side[n] = 3;
+            }
+            else if (3 < Side[n])
+            {
+                Side[n] = 0;
+            }
+
+            if (Data[Side[n]] == 1)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    int[] MapPosSearch()
+    int[] FirstPosSearch()
     {
         int[] ans = { 0, 0 };
 
@@ -78,5 +165,57 @@ public class EnemyMove : MonoBehaviour
         }
 
         return ans;
+    }
+
+    void PlayerPosSearch()
+    {
+        Vector3 PlayerPos = Player.transform.position;
+        float PosX = transform.position.x - PlayerPos.x;
+        float PosY = transform.position.y - PlayerPos.y;
+
+        switch (Front)
+        {
+            case 0:
+                if (-30 <= PosY && PosY <= 0 && Mathf.Abs(PosX) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+            case 1:
+                if (-30 <= PosX && PosX <= 0 && Mathf.Abs(PosY) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+            case 2:
+                if (0 <= PosY && PosY <= 30 && Mathf.Abs(PosX) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+            case 3:
+                if (0 <= PosX && PosX <= 30 && Mathf.Abs(PosY) <= 10)
+                {
+                    MapPosLoad(PlayerPos);
+                }
+                break;
+        }
+    }
+    void MapPosLoad(Vector3 PlayerPos)
+    {
+        TargetMapPos[0] = (int)PlayerPos.x / 20;
+        if (PlayerPos.x % 20 > 10)
+        {
+            TargetMapPos[0]++;
+        }
+
+        TargetMapPos[1] = (int)PlayerPos.y / 20;
+        if (PlayerPos.y % 20 > 10)
+        {
+            TargetMapPos[1]++;
+        }
+
+        TargetPos.x = TargetMapPos[0] * 20;
+        TargetPos.y = TargetMapPos[1] * 20;
     }
 }

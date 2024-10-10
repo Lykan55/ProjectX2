@@ -129,7 +129,10 @@ public class stage : MonoBehaviour
                 {
                     Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
                     GameObject enemy = Instantiate(Enemy, pos, Quaternion.identity);
-                    enemy.transform.parent = transform;
+
+                    GameObject gem = Instantiate(Gem, pos, Quaternion.identity);
+                    gem.transform.parent = transform;
+                    GemNumber++;
 
                     GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
                     boxC.transform.parent = transform;
@@ -322,7 +325,7 @@ public class stage : MonoBehaviour
 
     public int[,] ReturnMap()
     {
-        int[,] Map = new int[inputx - 1, inputy - 1];
+        int[,] Map = new int[inputx, inputy];
 
         for (int x = 0; x < inputx; x++)
         {
