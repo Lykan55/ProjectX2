@@ -12,6 +12,8 @@ TagManager:
   - StageBoxA
   - StageBoxB
   - gem
+  - Trigger
+  - JumpTrigger
   layers:
   - Default
   - TransparentFX
