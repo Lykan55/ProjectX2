@@ -4,22 +4,30 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 using Unity.VisualScripting;
 
 public class Human1 : MonoBehaviour
 {
-    [SerializeField, Header("移動速度")]//Unity上でMoveSpeedの値を変更できるようになる
+    [SerializeField, Header("移動速度")]//  Unity上でMoveSpeedの値を変更できるようになる
     private float MoveSpeed;
     [SerializeField, Header("ジャンプ速度")]
     private float JumpSpeed;
+    public bool isSPressed = false;
+
 
     public GameObject PlayerCollision;// Human1の当たっているオブジェクト
+    public Collider2D StayCollider;
+    public GameObject stageMaker;//  ジェムの個数参照用
+    public TextMeshProUGUI gemText; //  ジェムの個数UI
+
 
     private Vector2 inputDirection;
     private Rigidbody2D rigid;
     private Animator anim;
     private bool bJump;
-    private float MoveX = 0.0f;//向きの判定変数
+    private float MoveX = 0.0f;//  向きの判定変数
 
     public float jumpForce = 10f;
     private int health = 1;
@@ -43,6 +51,15 @@ public class Human1 : MonoBehaviour
         {
             transform.localScale = new Vector3(-1, 1);
         }
+        
+        //  Gemの残数を更新
+        UpdateText();
+    }
+
+    public void UpdateText()
+    {
+        // int型の変数を文字列に変換してTextに設定
+        gemText.text = stageMaker.GetComponent<stage>().GemNumber.ToString();
     }
 
     private void Move()
@@ -55,7 +72,7 @@ public class Human1 : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor" && collision.transform.position.y < transform.position.y - 3)
         {
-            bJump = false;   //もう一度ジャンプできるように
+            bJump = false;   //  もう一度ジャンプできるように
             anim.SetBool("Jump", bJump);
         }
 
@@ -63,10 +80,14 @@ public class Human1 : MonoBehaviour
         {
             HandleCollisionWithEnemy(collision);
         }
+    }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
         if (collision.gameObject.tag == "gem")
         {
             Destroy(collision.gameObject);
+            stageMaker.GetComponent<stage>().GemNumber--;
         }
     }
 
@@ -81,17 +102,6 @@ public class Human1 : MonoBehaviour
         float contactY = collision.transform.position.y;
 
         TakeDamege();
-        /*
-        if (playerY > contactY)
-        {
-            Destroy(collision.gameObject);
-            GetComponent<Rigidbody2D>().velocity = new Vector2(0, jumpForce);
-        }
-        else
-        {
-            TakeDamege();
-        }
-        */
     }
 
     private void TakeDamege()
@@ -100,7 +110,6 @@ public class Human1 : MonoBehaviour
 
         if (health <= 0)
         {
-            //Debug.Log("Player is dead!");
             gameObject.SetActive(false);
             SceneManager.LoadScene("Dead");
         }
