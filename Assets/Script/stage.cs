@@ -338,4 +338,13 @@ public class stage : MonoBehaviour
 
         return ans;
     }
+    public int[] ReturnPos(int x,int y)
+    {
+        int[] ans = new int[2];
+
+        ans[0] = inputx - 1 - x;
+        ans[1] = inputy - 1 - y;
+
+        return ans;
+    }
 }

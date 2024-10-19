@@ -219,4 +219,23 @@ public class EnemyMove : MonoBehaviour
         TargetPos.x = TargetMapPos[0] * 20;
         TargetPos.y = TargetMapPos[1] * 20;
     }
+
+    public void MapNewLoad(Vector2 Pos)
+    {
+        int x = (int)Pos.x / 20;
+        if (Pos.x % 20 > 10)
+        {
+            x++;
+        }
+
+        int y = (int)Pos.y / 20;
+        if (Pos.y % 20 > 10)
+        {
+            y++;
+        }
+
+        int[] NewPos = GameObject.Find("StageMaker").GetComponent<stage>().ReturnPos(x, y);
+
+        Map[NewPos[0], NewPos[1]] = 1;
+    }
 }
