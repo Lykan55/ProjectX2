@@ -9,6 +9,7 @@ public class WallDestroyTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "wall")
         {
+            GameObject.Find("enemy 0").GetComponent<EnemyMove>().MapNewLoad(collision.transform.position);
             collision.transform.parent.gameObject.SetActive(false);
             Debug.Log("プレハブが呼び出されて、クローンされて壁を削除したよ");
         }
