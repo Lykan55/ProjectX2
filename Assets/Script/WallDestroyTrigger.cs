@@ -5,18 +5,36 @@ using UnityEngine.SceneManagement;
 
 public class WallDestroyTrigger : MonoBehaviour
 {
-    private void OnCollisionStay2D(Collision2D collision)
+    public GameObject itemPanel;
+    private void Start()
     {
-        if (collision.gameObject.tag == "wall")
+        itemPanel = GameObject.Find("ItemPanel");
+        Destroy(gameObject,0.5f);
+    }
+
+    private IEnumerator CheckTrue()
+    {
+        yield return new WaitForSeconds(0.2f);
+        if (itemPanel != null)
         {
-            GameObject.Find("enemy 0").GetComponent<EnemyMove>().MapNewLoad(collision.transform.position);
-            collision.transform.parent.gameObject.SetActive(false);
-            Debug.Log("プレハブが呼び出されて、クローンされて壁を削除したよ");
+            itemPanel.GetComponent<ItemManager>().ItemCheck = true;
         }
         else
         {
-            Debug.Log("ここは破壊できません");
+            Debug.Log("ItemPanelが見つかりません。");
         }
-        Destroy(gameObject);
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("wall"))
+        {
+            GameObject.Find("enemy 0(Clone)").GetComponent<EnemyMove>().MapNewLoad(collision.transform.position);
+            collision.transform.parent.gameObject.SetActive(false);
+            Debug.Log("クローンされて壁を削除したよ");
+        }
+        else
+        {
+            Debug.Log("生成後。ここは破壊できません");
+        }
     }
 }

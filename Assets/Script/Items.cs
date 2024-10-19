@@ -237,8 +237,9 @@ public class ItemManager : MonoBehaviour
         targetTagMinusX = null;
         targetTagMinusY = null;
 
+
         // アイテム再使用許可
-        ItemCheck = true;
+        StartCoroutine(wallTime());
     }
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -307,5 +308,10 @@ public class ItemManager : MonoBehaviour
         {
             targetTagMinusY = targetObjectMinusY.gameObject.tag;
         }
+    }
+    private IEnumerator wallTime()
+    {
+        yield return new WaitForSeconds(8f);
+        ItemCheck = true;
     }
 }
