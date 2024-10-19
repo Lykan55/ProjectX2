@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Return : MonoBehaviour
 {
+    /*
     public int ReturnCnt;
 
     private GameObject Player;
@@ -155,5 +156,74 @@ public class Return : MonoBehaviour
                 EnemyFlag = false;
             }
         }
+    }
+    */
+
+    private GameObject Player;
+    private GameObject Enemy;
+
+    private List<Vector2> PlayerPosList;
+    private List<Vector2> EnemyPosList;
+
+    private Vector2 EnemyCurrPos;
+    private Vector2 EnemyPrePos;
+
+    private float Timer = 0.0f;
+    private bool Flag = true;
+
+    public float ReturnTime;
+    public float ReturnSpeed;
+
+    private void Start()
+    {
+        Player = GameObject.Find("Human 1");
+        Enemy = GameObject.Find("enemy 0(Clone)");
+
+        PlayerPosList = new List<Vector2>(Player.GetComponent<TimeWarpData>().PosList);
+        EnemyPosList = new List<Vector2>(Enemy.GetComponent<TimeWarpData>().PosList);
+
+        EnemyCurrPos = EnemyPosList[EnemyPosList.Count - 1];
+
+        Player.GetComponent<TimeWarpData>().Return = true;
+        Enemy.GetComponent<TimeWarpData>().Return = true;
+        Enemy.GetComponent<EnemyMove>().Return = true;
+    }
+
+    private void Update()
+    {
+        if (Flag)
+        {
+            if (PlayerPosList.Count != 1)
+            {
+                Player.transform.position = Vector2.MoveTowards(Player.transform.position, PlayerPosList[PlayerPosList.Count - 1], ReturnSpeed);
+                PlayerPosList.RemoveAt(PlayerPosList.Count - 1);
+            }
+            if (EnemyPosList.Count != 1)
+            {
+                Enemy.transform.position = Vector2.MoveTowards(Enemy.transform.position, EnemyPosList[EnemyPosList.Count - 1], ReturnSpeed);
+                EnemyPrePos = EnemyCurrPos;
+                EnemyCurrPos = EnemyPosList[EnemyPosList.Count - 1];
+                EnemyPosList.RemoveAt(EnemyPosList.Count - 1);
+            }
+
+            if (Timer >= ReturnTime || (PlayerPosList.Count == 1 && EnemyPosList.Count == 1))
+            {
+                Player.GetComponent<TimeWarpData>().PosList = new List<Vector2>(PlayerPosList);
+                Enemy.GetComponent<TimeWarpData>().PosList = new List<Vector2>(EnemyPosList);
+
+                Enemy.GetComponent<EnemyMove>().RouteSeach(EnemyPrePos);
+
+                Player.GetComponent<TimeWarpData>().Return = false;
+                Enemy.GetComponent<TimeWarpData>().Return = false;
+                Enemy.GetComponent<EnemyMove>().Return = false;
+
+                GameObject.Find("ItemPanel").GetComponent<ItemManager>().ItemCheck = true;
+                Destroy(gameObject);
+                Flag = false;
+            }
+
+            Timer += Time.deltaTime;
+        }
+
     }
 }

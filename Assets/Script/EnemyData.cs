@@ -12,6 +12,7 @@ public class EnemyData : MonoBehaviour
     public List<Vector3> PosList = new List<Vector3>();
     private int ListNum = 0;
     public bool Return = false;
+    private float Timer = 0.0f;
 
     private void Start()
     {
@@ -31,17 +32,19 @@ public class EnemyData : MonoBehaviour
             if (Player.GetComponent<PlayerData>().Movement == true)
             {
                 PosList.Add(Player.GetComponent<PlayerData>().PlayerPrePos);
-                GetComponent<EnemyTimer>().Timer = 0.0f;
+                Timer = 0.0f;
                 Player.GetComponent<PlayerData>().Movement = false;
             }
-            else if (GetComponent<EnemyTimer>().Timer >= 5.0f)
+            else if (Timer >= 5.0f)
             {
                 PosList.Add(Player.GetComponent<PlayerData>().PlayerCurrPos);
-                GetComponent<EnemyTimer>().Timer = 0.0f;
+                Timer = 0.0f;
                 Player.GetComponent<TimeWarp>().CntControl();
             }
 
             Move();
+
+            Timer += Time.deltaTime;
         }
 
     }

@@ -12,6 +12,8 @@ public class EnemyMove : MonoBehaviour
     public int Front = 0;
     private bool SearchFlag = false;
 
+    public bool Return = false;
+
     void Start()
     {
         Player = GameObject.Find("Human 1");
@@ -23,15 +25,18 @@ public class EnemyMove : MonoBehaviour
 
     void Update()
     {
-        PlayerPosSearch();
-        transform.position = Vector3.MoveTowards(transform.position, TargetPos, 0.1f);
-
-        if (TargetPos == transform.position)
+        if (!Return)
         {
-            Front = FrontSearch();
-            TargetPosSearch();
-            TargetPos.x = TargetMapPos[0] * 20;
-            TargetPos.y = TargetMapPos[1] * 20;
+            PlayerPosSearch();
+            transform.position = Vector3.MoveTowards(transform.position, TargetPos, 0.1f);
+
+            if (TargetPos == transform.position)
+            {
+                Front = FrontSearch();
+                TargetPosSearch();
+                TargetPos.x = TargetMapPos[0] * 20;
+                TargetPos.y = TargetMapPos[1] * 20;
+            }
         }
     }
 
@@ -237,5 +242,53 @@ public class EnemyMove : MonoBehaviour
         int[] NewPos = GameObject.Find("StageMaker").GetComponent<stage>().ReturnPos(x, y);
 
         Map[NewPos[0], NewPos[1]] = 1;
+    }
+
+    public void RouteSeach(Vector2 PrePos)
+    {
+        if (PrePos.x == transform.position.x)
+        {
+            if (PrePos.y > transform.position.y)
+            {
+                Front = 0;
+            }
+            else
+            {
+                Front = 2;
+            }
+        }
+        else
+        {
+            if (PrePos.x > transform.position.x)
+            {
+                Front = 1;
+            }
+            else
+            {
+                Front = 3;
+            }
+        }
+
+        TargetPosSet();
+        TargetPosSearch();
+        TargetPos.x = TargetMapPos[0] * 20;
+        TargetPos.y = TargetMapPos[1] * 20;
+    }
+    private void TargetPosSet()
+    {
+        int x = (int)transform.position.x / 20;
+        if (transform.position.x % 20 > 10)
+        {
+            x++;
+        }
+
+        int y = (int)transform.position.y / 20;
+        if (transform.position.y % 20 > 10)
+        {
+            y++;
+        }
+
+        TargetMapPos[0] = x;
+        TargetMapPos[1] = y;
     }
 }
