@@ -10,12 +10,13 @@ public class EnemyMove : MonoBehaviour
     int[,] Map;
     public int[] TargetMapPos = new int[2];
     public int Front = 0;
+    private bool SearchFlag = false;
 
     void Start()
     {
         Player = GameObject.Find("Human 1");
         Map = GameObject.Find("StageMaker").GetComponent<stage>().ReturnMap();
-        TargetMapPos = FirstPosSearch();
+        TargetMapPos = GameObject.Find("StageMaker").GetComponent<stage>().ReturnEnemyPos();
         TargetPos.x = TargetMapPos[0] * 20;
         TargetPos.y = TargetMapPos[1] * 20;
     }
@@ -61,8 +62,6 @@ public class EnemyMove : MonoBehaviour
                 Flag = false;
             }
         }
-
-        Flag = true;
     }
     int[] AreaSearch()
     {
@@ -147,58 +146,60 @@ public class EnemyMove : MonoBehaviour
         return false;
     }
 
-    int[] FirstPosSearch()
-    {
-        int[] ans = { 0, 0 };
-
-        for (int x = 0; x < Map.GetLength(0); x++)
-        {
-            for (int y = 0; y < Map.GetLength(1); y++)
-            {
-                if (Map[x, y] == 3)
-                {
-                    ans[0] = x;
-                    ans[1] = y;
-                    return ans;
-                }
-            }
-        }
-
-        return ans;
-    }
-
     void PlayerPosSearch()
     {
         Vector3 PlayerPos = Player.transform.position;
         float PosX = transform.position.x - PlayerPos.x;
         float PosY = transform.position.y - PlayerPos.y;
 
+        bool Flag = false;
+
+        int SearchAria;
+        if (SearchFlag)
+        {
+            SearchAria = 50;
+        }
+        else
+        {
+            SearchAria = 30;
+        }
+
         switch (Front)
         {
             case 0:
-                if (-30 <= PosY && PosY <= 0 && Mathf.Abs(PosX) <= 10)
+                if (SearchAria * -1 <= PosY && PosY <= 0 && Mathf.Abs(PosX) <= 10)
                 {
-                    MapPosLoad(PlayerPos);
+                    Flag = true;
                 }
                 break;
             case 1:
-                if (-30 <= PosX && PosX <= 0 && Mathf.Abs(PosY) <= 10)
+                if (SearchAria * -1 <= PosX && PosX <= 0 && Mathf.Abs(PosY) <= 10)
                 {
-                    MapPosLoad(PlayerPos);
+                    Flag = true;
                 }
                 break;
             case 2:
-                if (0 <= PosY && PosY <= 30 && Mathf.Abs(PosX) <= 10)
+                if (0 <= PosY && PosY <= SearchAria && Mathf.Abs(PosX) <= 10)
                 {
-                    MapPosLoad(PlayerPos);
+                    Flag = true;
                 }
                 break;
             case 3:
-                if (0 <= PosX && PosX <= 30 && Mathf.Abs(PosY) <= 10)
+                if (0 <= PosX && PosX <= SearchAria && Mathf.Abs(PosY) <= 10)
                 {
-                    MapPosLoad(PlayerPos);
+                    Flag = true;
                 }
                 break;
+        }
+
+        if (Flag)
+        {
+            MapPosLoad(PlayerPos);
+            SearchFlag = true;
+        }
+        else
+        {
+            SearchFlag = false;
         }
     }
     void MapPosLoad(Vector3 PlayerPos)

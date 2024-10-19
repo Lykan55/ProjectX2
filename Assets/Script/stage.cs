@@ -16,7 +16,7 @@ public class stage : MonoBehaviour
     static bool end = false;
     static int[] start = new int[2];
     static int[] goaldata = { 0, 0, 0 };
-    static int[] enemysummon = { 0, 0, 0 };
+    static int[] enemysummon = { 0, 0 };
     static bool flag = false;
 
     public int width;
@@ -63,7 +63,8 @@ public class stage : MonoBehaviour
                     goaldata[2] = rist.Length;
                     if (!flag)
                     {
-                        Stage[x, y] = 3;
+                        enemysummon[0] = x;
+                        enemysummon[1] = y;
                         flag = true;
                     }
                 }
@@ -125,20 +126,11 @@ public class stage : MonoBehaviour
                     GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
                     boxC.transform.parent = transform;
                 }
-                else if (Stage[x, y] == 3)
-                {
-                    Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20);
-                    GameObject enemy = Instantiate(Enemy, pos, Quaternion.identity);
-
-                    GameObject gem = Instantiate(Gem, pos, Quaternion.identity);
-                    gem.transform.parent = transform;
-                    GemNumber++;
-
-                    GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
-                    boxC.transform.parent = transform;
-                }
             }
         }
+
+        Vector2 enemypos = new Vector2((inputx - 1 - enemysummon[0]) * 20, (inputy - 1 - enemysummon[1]) * 20);
+        GameObject enemy = Instantiate(Enemy, enemypos, Quaternion.identity);
     }
 
 
@@ -336,5 +328,14 @@ public class stage : MonoBehaviour
         }
 
         return Map;
+    }
+    public int[] ReturnEnemyPos()
+    {
+        int[] ans = enemysummon;
+
+        ans[0] = inputx - 1 - ans[0];
+        ans[1] = inputy - 1 - ans[1];
+
+        return ans;
     }
 }
