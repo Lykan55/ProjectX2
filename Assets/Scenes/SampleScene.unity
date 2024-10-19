@@ -742,7 +742,7 @@ GameObject:
   - component: {fileID: 501945775}
   - component: {fileID: 501945778}
   - component: {fileID: 501945779}
-  - component: {fileID: 501945780}
+  - component: {fileID: 501945781}
   m_Layer: 0
   m_Name: Human 1
   m_TagString: Player
@@ -1047,7 +1047,7 @@ MonoBehaviour:
   PlayerPrePos: {x: 0, y: 0, z: 0}
   Movement: 0
   Return: 0
---- !u!114 &501945780
+--- !u!114 &501945781
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1056,9 +1056,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 501945767}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f21404660c9faa4e82e40d5828cffda, type: 3}
+  m_Script: {fileID: 11500000, guid: 8136bef3afbd0c642bf0003a58c8a4cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PosList: []
   Return: 0
 --- !u!1 &505379999
 GameObject:
