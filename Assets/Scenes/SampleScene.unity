@@ -681,7 +681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Enemy: {fileID: 8114399302398817437, guid: 00172349d8aeaba4abd8949dbc9bb9db, type: 3}
-  SummonNumber: 10
+  SummonNumber: 5
 --- !u!4 &409192484
 Transform:
   m_ObjectHideFlags: 0
@@ -923,7 +923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5554cfec61a6d704eae7df3140d05f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 15
+  MoveSpeed: 18
   JumpSpeed: 45
   isSPressed: 0
   PlayerCollision: {fileID: 0}

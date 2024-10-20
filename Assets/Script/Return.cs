@@ -219,7 +219,6 @@ public class Return : MonoBehaviour
                     Enemy[i].GetComponent<EnemyMove>().Return = false;
                 }
 
-                GameObject.Find("ItemPanel").GetComponent<ItemManager>().ItemCheck = true;
                 Destroy(gameObject);
                 Flag = false;
             }
