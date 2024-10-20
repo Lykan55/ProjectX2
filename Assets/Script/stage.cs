@@ -16,8 +16,8 @@ public class stage : MonoBehaviour
     static bool end = false;
     static int[] start = new int[2];
     static int[] goaldata = { 0, 0, 0 };
-    static int[] enemysummon = { 0, 0 };
-    static bool flag = false;
+    static List<int[]> EnemySummonData = new List<int[]>();
+    static bool EnemyFlag = true;
 
     public int width;
     public int height;
@@ -56,22 +56,28 @@ public class stage : MonoBehaviour
 
             if (data[0] == -1 && data[1] == -1 && data[2] == -1 && data[3] == -1)
             {
+                if (EnemyFlag)
+                {
+                    int[] SummonData = { inputx - 1 - x, inputy - 1 - y };
+                    EnemySummonData.Add(SummonData);
+                    EnemyFlag = false;
+                }
+
                 if (goaldata[2] < rist.Length)
                 {
                     goaldata[0] = x;
                     goaldata[1] = y;
                     goaldata[2] = rist.Length;
-                    if (!flag)
-                    {
-                        enemysummon[0] = x;
-                        enemysummon[1] = y;
-                        flag = true;
-                    }
                 }
+
                 nothing();
             }
             else
             {
+                if (!EnemyFlag)
+                {
+                    EnemyFlag = true;
+                }
                 going();
             }
         }
@@ -129,8 +135,7 @@ public class stage : MonoBehaviour
             }
         }
 
-        Vector2 enemypos = new Vector2((inputx - 1 - enemysummon[0]) * 20, (inputy - 1 - enemysummon[1]) * 20);
-        GameObject enemy = Instantiate(Enemy, enemypos, Quaternion.identity);
+        GameObject.Find("EnemyMaker").GetComponent<EnemyMaker>().Summon(EnemySummonData);
     }
 
 
@@ -329,16 +334,7 @@ public class stage : MonoBehaviour
 
         return Map;
     }
-    public int[] ReturnEnemyPos()
-    {
-        int[] ans = enemysummon;
-
-        ans[0] = inputx - 1 - ans[0];
-        ans[1] = inputy - 1 - ans[1];
-
-        return ans;
-    }
-    public int[] ReturnPos(int x,int y)
+    public int[] ReturnPos(int x, int y)
     {
         int[] ans = new int[2];
 

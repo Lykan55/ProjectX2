@@ -1,26 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class EnemyMove : MonoBehaviour
 {
     GameObject Player;
     Vector3 TargetPos;
     int[,] Map;
-    public int[] TargetMapPos = new int[2];
-    public int Front = 0;
+    private int[] TargetMapPos = new int[2];
+    private int Front = 0;
     private bool SearchFlag = false;
+    private int NextFront = -1;
+    private Vector2 CurrPos;
+    private Vector2 PrePos;
 
+    public float EnemySpeed;
     public bool Return = false;
 
     void Start()
     {
         Player = GameObject.Find("Human 1");
         Map = GameObject.Find("StageMaker").GetComponent<stage>().ReturnMap();
-        TargetMapPos = GameObject.Find("StageMaker").GetComponent<stage>().ReturnEnemyPos();
+        TargetPosSet();
         TargetPos.x = TargetMapPos[0] * 20;
         TargetPos.y = TargetMapPos[1] * 20;
+        CurrPos = transform.position;
+        PrePos = CurrPos;
     }
 
     void Update()
@@ -28,7 +36,7 @@ public class EnemyMove : MonoBehaviour
         if (!Return)
         {
             PlayerPosSearch();
-            transform.position = Vector3.MoveTowards(transform.position, TargetPos, 0.1f);
+            transform.position = Vector3.MoveTowards(transform.position, TargetPos, EnemySpeed);
 
             if (TargetPos == transform.position)
             {
@@ -38,6 +46,8 @@ public class EnemyMove : MonoBehaviour
                 TargetPos.y = TargetMapPos[1] * 20;
             }
         }
+        PrePos = CurrPos;
+        CurrPos = transform.position;
     }
 
     void TargetPosSearch()
@@ -99,26 +109,35 @@ public class EnemyMove : MonoBehaviour
     {
         int[] Data = AreaSearch();
         int DataFront = 0;
-        if (Data[4] > 1)
-        {
-            Front += 2;
-            if (Front > 3)
-            {
-                Front -= 4;
-            }
 
-            do
+        if (NextFront == -1)
+        {
+            if (Data[4] > 1)
             {
-                DataFront = Random.Range(0, 4);
+                Front += 2;
+                if (Front > 3)
+                {
+                    Front -= 4;
+                }
+
+                do
+                {
+                    DataFront = Random.Range(0, 4);
+                }
+                while (Data[DataFront] == 0 || DataFront == Front);
             }
-            while (Data[DataFront] == 0 || DataFront == Front);
+            else
+            {
+                while (Data[DataFront] == 0)
+                {
+                    DataFront++;
+                }
+            }
         }
         else
         {
-            while (Data[DataFront] == 0)
-            {
-                DataFront++;
-            }
+            DataFront = NextFront;
+            NextFront = -1;
         }
 
         return DataFront;
@@ -204,6 +223,10 @@ public class EnemyMove : MonoBehaviour
         }
         else
         {
+            if (SearchFlag)
+            {
+                PlayerLostSearch(PosX, PosY);
+            }
             SearchFlag = false;
         }
     }
@@ -223,6 +246,52 @@ public class EnemyMove : MonoBehaviour
 
         TargetPos.x = TargetMapPos[0] * 20;
         TargetPos.y = TargetMapPos[1] * 20;
+    }
+    private void PlayerLostSearch(float PosX, float PosY)
+    {
+        int[] Data = AreaSearch();
+
+        if (Data[4] <= 2)
+        {
+            NextFront = -1;
+        }
+        else
+        {
+            switch (Front)
+            {
+                case 0:
+                case 2:
+                    if (-30 <= PosX && PosX <= -10)
+                    {
+                        NextFront = 1;
+                    }
+                    else if (10 <= PosX && PosX <= 30)
+                    {
+                        NextFront = 3;
+                    }
+                    else
+                    {
+                        NextFront = Front;
+                    }
+                    break;
+
+                case 1:
+                case 3:
+                    if (-30 <= PosY && PosY <= -10)
+                    {
+                        NextFront = 0;
+                    }
+                    else if (10 <= PosY && PosY <= 30)
+                    {
+                        NextFront = 2;
+                    }
+                    else
+                    {
+                        NextFront = Front;
+                    }
+                    break;
+            }
+        }
     }
 
     public void MapNewLoad(Vector2 Pos)
@@ -244,7 +313,7 @@ public class EnemyMove : MonoBehaviour
         Map[NewPos[0], NewPos[1]] = 1;
     }
 
-    public void RouteSeach(Vector2 PrePos)
+    public void RouteSeach()
     {
         if (PrePos.x == transform.position.x)
         {
@@ -269,6 +338,8 @@ public class EnemyMove : MonoBehaviour
             }
         }
 
+        SearchFlag = false;
+        NextFront = -1;
         TargetPosSet();
         TargetPosSearch();
         TargetPos.x = TargetMapPos[0] * 20;
