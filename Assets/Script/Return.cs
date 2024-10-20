@@ -160,13 +160,10 @@ public class Return : MonoBehaviour
     */
 
     private GameObject Player;
-    private GameObject Enemy;
+    private List<GameObject> Enemy;
 
     private List<Vector2> PlayerPosList;
-    private List<Vector2> EnemyPosList;
-
-    private Vector2 EnemyCurrPos;
-    private Vector2 EnemyPrePos;
+    private List<List<Vector2>> EnemyPosList = new List<List<Vector2>>();
 
     private float Timer = 0.0f;
     private bool Flag = true;
@@ -177,16 +174,17 @@ public class Return : MonoBehaviour
     private void Start()
     {
         Player = GameObject.Find("Human 1");
-        Enemy = GameObject.Find("enemy 0(Clone)");
+        Enemy = new List<GameObject>(GameObject.Find("EnemyMaker").GetComponent<EnemyMaker>().ReturnEnemys());
 
         PlayerPosList = new List<Vector2>(Player.GetComponent<TimeWarpData>().PosList);
-        EnemyPosList = new List<Vector2>(Enemy.GetComponent<TimeWarpData>().PosList);
-
-        EnemyCurrPos = EnemyPosList[EnemyPosList.Count - 1];
-
         Player.GetComponent<TimeWarpData>().Return = true;
-        Enemy.GetComponent<TimeWarpData>().Return = true;
-        Enemy.GetComponent<EnemyMove>().Return = true;
+
+        for (int i = 0; i < Enemy.Count; i++)
+        {
+            EnemyPosList.Add(new List<Vector2>(Enemy[i].GetComponent<TimeWarpData>().PosList));
+            Enemy[i].GetComponent<TimeWarpData>().Return = true;
+            Enemy[i].GetComponent<EnemyMove>().Return = true;
+        }
     }
 
     private void Update()
@@ -198,24 +196,28 @@ public class Return : MonoBehaviour
                 Player.transform.position = Vector2.MoveTowards(Player.transform.position, PlayerPosList[PlayerPosList.Count - 1], ReturnSpeed);
                 PlayerPosList.RemoveAt(PlayerPosList.Count - 1);
             }
-            if (EnemyPosList.Count != 1)
+            for (int i = 0; i < Enemy.Count; i++)
             {
-                Enemy.transform.position = Vector2.MoveTowards(Enemy.transform.position, EnemyPosList[EnemyPosList.Count - 1], ReturnSpeed);
-                EnemyPrePos = EnemyCurrPos;
-                EnemyCurrPos = EnemyPosList[EnemyPosList.Count - 1];
-                EnemyPosList.RemoveAt(EnemyPosList.Count - 1);
+                if (EnemyPosList[i].Count != 1)
+                {
+                    Enemy[i].transform.position = Vector2.MoveTowards(Enemy[i].transform.position, EnemyPosList[i][EnemyPosList[i].Count - 1], ReturnSpeed);
+                    EnemyPosList[i].RemoveAt(EnemyPosList[i].Count - 1);
+                }
             }
 
-            if (Timer >= ReturnTime || (PlayerPosList.Count == 1 && EnemyPosList.Count == 1))
+
+            if (Timer >= ReturnTime || PlayerPosList.Count == 1)
             {
                 Player.GetComponent<TimeWarpData>().PosList = new List<Vector2>(PlayerPosList);
-                Enemy.GetComponent<TimeWarpData>().PosList = new List<Vector2>(EnemyPosList);
-
-                Enemy.GetComponent<EnemyMove>().RouteSeach(EnemyPrePos);
-
                 Player.GetComponent<TimeWarpData>().Return = false;
-                Enemy.GetComponent<TimeWarpData>().Return = false;
-                Enemy.GetComponent<EnemyMove>().Return = false;
+
+                for (int i = 0; i < Enemy.Count; i++)
+                {
+                    Enemy[i].GetComponent<TimeWarpData>().PosList = new List<Vector2>(EnemyPosList[i]);
+                    Enemy[i].GetComponent<EnemyMove>().RouteSeach();
+                    Enemy[i].GetComponent<TimeWarpData>().Return = false;
+                    Enemy[i].GetComponent<EnemyMove>().Return = false;
+                }
 
                 GameObject.Find("ItemPanel").GetComponent<ItemManager>().ItemCheck = true;
                 Destroy(gameObject);
