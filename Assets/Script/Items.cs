@@ -114,7 +114,8 @@ public class ItemManager : MonoBehaviour
         {
             selectedItems.Add(itemImages[index]);
         }
-        ItemCheck = true; // ここでアイテム使用許可
+        // ここでアイテム使用許可
+        ItemCheck = true; 
     }
 
     void DisplayItems()
@@ -168,6 +169,8 @@ public class ItemManager : MonoBehaviour
             {
                 Debug.Log("アイテムスロットにアイテムがありません");
             }
+            // スキルCT開始
+            StartCoroutine(CT());            
         }
         else if (ItemCheck == false)
         {
@@ -191,7 +194,6 @@ public class ItemManager : MonoBehaviour
             // Ortho Sizeを元に戻す
             virtualCamera.m_Lens.OrthographicSize = originalOrthoSize;
         }
-        ItemCheck = true;
     }
 
 
@@ -202,7 +204,6 @@ public class ItemManager : MonoBehaviour
         goalDirectionItem.UseGoalDirectionItem(); // ゴールの方向を表示するメソッドを呼び出す
         // ３秒待機
         yield return new WaitForSeconds(3f);
-        ItemCheck = true;
     }
 
 
@@ -236,9 +237,6 @@ public class ItemManager : MonoBehaviour
         targetTagPlusX = null;
         targetTagMinusX = null;
         targetTagMinusY = null;
-
-        // アイテム再使用許可
-        ItemCheck = true;
     }
 
     /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -307,5 +305,10 @@ public class ItemManager : MonoBehaviour
         {
             targetTagMinusY = targetObjectMinusY.gameObject.tag;
         }
+    }
+    private IEnumerator CT()
+    {
+        yield return new WaitForSeconds(5f);
+        ItemCheck = true;
     }
 }
