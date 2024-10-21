@@ -795,7 +795,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &501945768
 Rigidbody2D:
   serializedVersion: 4
@@ -1661,6 +1661,7 @@ MonoBehaviour:
   width: 15
   height: 15
   GemNumber: 0
+  Player: {fileID: 501945767}
   Enemy: {fileID: 8114399302398817437, guid: 00172349d8aeaba4abd8949dbc9bb9db, type: 3}
   Gem: {fileID: 4267869110362028301, guid: b33444dd264a750438afa8e53bc60fff, type: 3}
   stageblockA: {fileID: 9089591882278033723, guid: b9a215c0e6d793b44b7cf03d2fac54c1, type: 3}
