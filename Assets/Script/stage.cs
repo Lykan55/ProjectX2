@@ -6,23 +6,23 @@ using UnityEngine;
 
 public class stage : MonoBehaviour
 {
-    static int x;
-    static int y;
-    static int[,] Stage;
-    static int[] data = { -1, -1, -1, -1 };
-    static int[] rist = new int[1];
-    static int cnt = 0;
-    static int go = -1;
-    static bool end = false;
-    static int[] start = new int[2];
-    static int[] goaldata = { 0, 0, 0 };
-    static List<int[]> EnemySummonData = new List<int[]>();
-    static bool EnemyFlag = true;
+    private int x;
+    private int y;
+    private int[,] Stage;
+    private int[] data = { -1, -1, -1, -1 };
+    private int[] rist = new int[1];
+    private int cnt = 0;
+    private int go = -1;
+    private bool end = false;
+    private int[] start = new int[2];
+    private int[] goaldata = { 0, 0, 0 };
+    private List<int[]> EnemySummonData = new List<int[]>();
+    private bool EnemyFlag = true;
 
     public int width;
     public int height;
-    static int inputx;
-    static int inputy;
+    private int inputx;
+    private int inputy;
 
     public int GemNumber = 0;
 
@@ -41,7 +41,7 @@ public class stage : MonoBehaviour
 
         Stage = new int[inputx, inputy];
 
-        Reset();
+        //Reset();
         firstpoint();
 
         while (end == false)
