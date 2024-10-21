@@ -20,7 +20,6 @@ public class EnemyMaker : MonoBehaviour
         for (int i = 0; i < SummonNumber; i++)
         {
             Vector2 Pos = new Vector2(SummonPos[i][0] * 20, SummonPos[i][1] * 20);
-            Debug.Log(Pos);
             Enemys.Add(Instantiate(Enemy, Pos, Quaternion.identity));
             Enemys[i].transform.parent = transform;
         }

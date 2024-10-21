@@ -12,6 +12,10 @@ public class TimeWarpData : MonoBehaviour
         if (!Return)
         {
             PosList.Add(transform.position);
+            if (PosList.Count > 100)
+            {
+                PosList.RemoveAt(0);
+            }
         }
     }
 }

@@ -118,6 +118,12 @@ public class stage : MonoBehaviour
 
                     GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
                     boxC.transform.parent = transform;
+                    /*
+                    if (x == 0 || x == inputx - 1 || y == 0 || y == inputy - 1)
+                    {
+
+                    }
+                    */
                 }
                 else if (Stage[x, y] == 2)
                 {
