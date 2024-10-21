@@ -18,6 +18,7 @@ public class stage : MonoBehaviour
     private int[] goaldata = { 0, 0, 0 };
     private List<int[]> EnemySummonData = new List<int[]>();
     private bool EnemyFlag = true;
+    private Vector2 StartPos;
 
     public int width;
     public int height;
@@ -26,6 +27,7 @@ public class stage : MonoBehaviour
 
     public int GemNumber = 0;
 
+    public GameObject Player;
     public GameObject Enemy;
 
     public GameObject Gem;
@@ -96,6 +98,13 @@ public class stage : MonoBehaviour
         Vector2 goalpos = new Vector2((inputx - 1 - goaldata[0]) * 20, (inputy - 1 - goaldata[1]) * 20 - 7);
         GameObject.Find("Goal").GetComponent<Transform>().position = goalpos;
 
+        StartCoroutine("StageMake");
+    }
+
+
+
+    IEnumerator StageMake()
+    {
         for (y = 0; y < inputy; y++)
         {
             for (x = 0; x < inputx; x++)
@@ -138,15 +147,15 @@ public class stage : MonoBehaviour
                     GameObject boxC = Instantiate(stageblockC, pos, Quaternion.identity);
                     boxC.transform.parent = transform;
                 }
+
+                yield return new WaitForSeconds(0.01f);
             }
         }
 
         GameObject.Find("EnemyMaker").GetComponent<EnemyMaker>().Summon(EnemySummonData);
+        Player.gameObject.SetActive(true);
+        Player.transform.position = StartPos;
     }
-
-
-
-
 
     int inputnumber(int input)
     {
@@ -179,9 +188,7 @@ public class stage : MonoBehaviour
         start[0] = x;
         start[1] = y;
 
-        Vector2 pos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20 - 7);
-        GameObject.Find("Human 1").GetComponent<Transform>().position = pos;
-
+        StartPos = new Vector2((inputx - 1 - x) * 20, (inputy - 1 - y) * 20 - 7);
     }
 
     void search()
