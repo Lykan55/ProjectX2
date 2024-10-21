@@ -43,6 +43,8 @@ public class stage : MonoBehaviour
 
         Stage = new int[inputx, inputy];
 
+        UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
+
         //Reset();
         firstpoint();
 
