@@ -36,7 +36,7 @@ public class EnemyMove : MonoBehaviour
         if (!Return)
         {
             PlayerPosSearch();
-            transform.position = Vector3.MoveTowards(transform.position, TargetPos, EnemySpeed);
+            transform.position = Vector3.MoveTowards(transform.position, TargetPos, EnemySpeed * Time.deltaTime);
 
             if (TargetPos == transform.position)
             {
