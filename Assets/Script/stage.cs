@@ -10,8 +10,7 @@ public class stage : MonoBehaviour
     private int y;
     private int[,] Stage;
     private int[] data = { -1, -1, -1, -1 };
-    private int[] rist = new int[1];
-    private int cnt = 0;
+    private List<int> MoveList = new List<int>();
     private int go = -1;
     private bool end = false;
     private int[] start = new int[2];
@@ -83,11 +82,11 @@ public class stage : MonoBehaviour
                     EnemyFlag = false;
                 }
 
-                if (goaldata[2] < rist.Length)
+                if (goaldata[2] < MoveList.Count)
                 {
                     goaldata[0] = x;
                     goaldata[1] = y;
-                    goaldata[2] = rist.Length;
+                    goaldata[2] = MoveList.Count;
                 }
 
                 nothing();
@@ -109,7 +108,7 @@ public class stage : MonoBehaviour
             {
                 if (Stage[x, y] != 0 && Stage[x, y + 1] != 0)
                 {
-                    //Stage[x, y + 1] = 2;
+                    Stage[x, y + 1] = 2;
                 }
             }
         }
@@ -266,13 +265,13 @@ public class stage : MonoBehaviour
 
     void nothing()
     {
-        if (cnt == 0)
+        if (MoveList.Count == 0)
         {
             end = true;
         }
         else
         {
-            switch (rist[cnt - 1])
+            switch (MoveList[MoveList.Count - 1])
             {
                 case 0:
                     y -= 2;
@@ -288,9 +287,7 @@ public class stage : MonoBehaviour
                     break;
             }
 
-            cnt--;
-            Array.Resize(ref rist, rist.Length - 2);
-            Array.Resize(ref rist, rist.Length + 1);
+            MoveList.RemoveAt(MoveList.Count - 1);
         }
     }
 
@@ -300,9 +297,7 @@ public class stage : MonoBehaviour
         {
             go = data[UnityEngine.Random.Range(0, 4)];
         }
-        rist[cnt] = go;
-        Array.Resize(ref rist, rist.Length + 1);
-        cnt++;
+        MoveList.Add(go);
 
         switch (go)
         {
@@ -346,10 +341,7 @@ public class stage : MonoBehaviour
             goaldata[n] = 0;
         }
 
-        cnt = 0;
-
-        Array.Resize(ref rist, 0);
-        Array.Resize(ref rist, 1);
+        MoveList.Clear();
     }
 
     public int[,] ReturnMap()
