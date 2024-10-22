@@ -294,7 +294,7 @@ public class EnemyMove : MonoBehaviour
         }
     }
 
-    public void MapNewLoad(Vector2 Pos)
+    public void MapNewLoad(Vector3 Pos)
     {
         int x = (int)Pos.x / 20;
         if (Pos.x % 20 > 10)
@@ -308,9 +308,9 @@ public class EnemyMove : MonoBehaviour
             y++;
         }
 
-        int[] NewPos = GameObject.Find("StageMaker").GetComponent<stage>().ReturnPos(x, y);
+        //int[] NewPos = GameObject.Find("StageMaker").GetComponent<stage>().ReturnPos(x, y);
 
-        Map[NewPos[0], NewPos[1]] = 1;
+        Map[x, y] = 1;
     }
 
     public void RouteSeach()
