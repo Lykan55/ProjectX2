@@ -109,7 +109,7 @@ public class stage : MonoBehaviour
             {
                 if (Stage[x, y] != 0 && Stage[x, y + 1] != 0)
                 {
-                    Stage[x, y + 1] = 2;
+                    //Stage[x, y + 1] = 2;
                 }
             }
         }
