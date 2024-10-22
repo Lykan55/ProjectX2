@@ -46,8 +46,24 @@ public class stage : MonoBehaviour
         UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
 
         //Reset();
+
+        for (y = 0; y < inputy; y++)
+        {
+            for (x = 0; x < inputx; x++)
+            {
+                Stage[x, y] = 0;
+            }
+        }
+
         firstpoint();
 
+        StartCoroutine("MapMake");
+    }
+
+
+
+    IEnumerator MapMake()
+    {
         while (end == false)
         {
             go = -1;
@@ -84,6 +100,7 @@ public class stage : MonoBehaviour
                 }
                 going();
             }
+            yield return null;
         }
 
         for (x = 1; x < inputx - 1; x++)
@@ -102,8 +119,6 @@ public class stage : MonoBehaviour
 
         StartCoroutine("StageMake");
     }
-
-
 
     IEnumerator StageMake()
     {
@@ -150,7 +165,7 @@ public class stage : MonoBehaviour
                     boxC.transform.parent = transform;
                 }
 
-                yield return new WaitForSeconds(0.01f);
+                yield return null;
             }
         }
 
@@ -158,6 +173,8 @@ public class stage : MonoBehaviour
         Player.gameObject.SetActive(true);
         Player.transform.position = StartPos;
     }
+
+
 
     int inputnumber(int input)
     {
